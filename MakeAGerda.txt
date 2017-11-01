@@ -1,0 +1,56 @@
+/////////////////////////////////////
+///////   AUTO LOGIN ////////////////
+/////////////////////////////////////
+Was able to fix this myself using information found here: http://askubuntu.com/questions/679419/how-to-make-auto-login-work-in-ubuntu-no-display-manager
+
+I made this file: /etc/systemd/system/getty@tty1.service.d/autologin.conf
+And put this in it:
+#################################
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --autologin pi --noclear %I 38400 linux
+#################################
+
+
+source: https://www.raspberrypi.org/forums/viewtopic.php?f=28&t=127042
+
+
+
+/////////////////////////////////////
+///////   AUTO SCRIPT STARTUP ///////
+/////////////////////////////////////
+
+
+prepend command to /etc/rc.local
+
+
+
+/////////////////////////////////////
+///////   install packages    ///////
+/////////////////////////////////////
+
+sudo apt-get install git
+sudo apt-get install python-pip
+sudo apt-get install python-mysqldb
+sudo apt-get install mysql-server
+
+sudo pip install boto
+sudo pip install pyserial
+sudo pip install pynmea2
+
+/////////////////////////////////////
+///////   MYSQL  ////////////////////
+/////////////////////////////////////
+
+//// INSTALL
+user: root
+pwrd: reverse
+
+//// IMPORT DATABASE
+
+mysql -u root -p
+<reverse>
+CREATE DATABASE ecoData;
+exit
+
+mysql -u root -p ecoData < ecoData.sql
