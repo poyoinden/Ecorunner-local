@@ -59,7 +59,7 @@ while True:
 		continue
 
 # Create RPM sensor object
-#rpmsensor = rpmsensor()
+rpmsensor = rpmsensor()
 
 # Create currenvoltage sensor object
 #voltagesensor = voltagesensor()
@@ -84,9 +84,9 @@ while(True):
 
 
 		# Collect rpm data to add them to database and send to ground base
-		#rpm = rpmsensor.getRPMdata()
-		#addToDatabase(rpm)
-		#makeMessage(rpm, sendQueue)
+		rpm = rpmsensor.getRPMdata()
+		addToDatabase(rpm)
+		makeMessage(rpm, sendQueue)
 
 		# Collect voltage and current data to add them to database and send to ground base
 		#voltage = voltagesensor.getVoltageData()
