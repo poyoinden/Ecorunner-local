@@ -59,7 +59,13 @@ while True:
 		continue
 
 # Create RPM sensor object
-rpmsensor = rpmsensor()
+try:
+	rpmsensor = rpmsensor()
+
+except:
+	print "No sensors connected, shutting down script"
+	sys.exit()
+
 
 # Create currenvoltage sensor object
 #voltagesensor = voltagesensor()
@@ -101,6 +107,4 @@ while(True):
 
 	except KeyboardInterrupt:
 		sys.exit()
-
-
 
