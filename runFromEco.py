@@ -92,18 +92,20 @@ while(True):
 
 		# Collect rpm data to add them to database and send to ground base
 		rpmObject = rpmsensor.getRPMdata()
-		rpm = rpmObject.getData()
-		print(rpm)
-		print(type(rpm))
-		rps = rpm / 60
-			
-		speed = rps * wheelCirc * 3.6
-		speedToWrite = 1200 + int(round(speed))%100	
- 		
-		#print(speedToWrite)
 		
-		# Schrijf de waarde voor de snelheid (km/h) naar het scherm
-		driverInterface.write(str(speedToWrite))
+		try:
+			rpm = rpmObject.getData()
+			print(rpm)
+			
+			rps = int(rpm) / 60
+			speed = rps * wheelCirc * 3.6
+			speedToWrite = 1200 + int(round(speed))%100
+			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
+			driverInterface.write(str(speedToWrite))
+		
+		except ValueError:
+			pass
+
 
 		addToDatabase(rpmObject)
 		makeMessage(rpmObject, sendQueue)
