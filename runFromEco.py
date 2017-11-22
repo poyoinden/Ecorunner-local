@@ -95,7 +95,7 @@ while(True):
 		
 		try:
 			rpm = rpmObject.getData()
-			print(rpm)
+			#print(rpm)
 			
 			rps = int(rpm) / 60
 			speed = rps * wheelCirc * 3.6
