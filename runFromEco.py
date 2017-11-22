@@ -1,3 +1,4 @@
+from __future__ import division
 from Instruction import Instruction
 from GBInstruction import GBInstruction
 from DriverInstruction import DriverInstruction
@@ -20,6 +21,8 @@ import socket
 import boto.sqs
 from boto.sqs.message import Message
 import telnetlib
+import serial
+import math
 
 while True:
 	try:
@@ -59,13 +62,11 @@ while True:
 		continue
 
 # Create RPM sensor object
-try:
-	rpmsensor = rpmsensor()
+rpmsensor = rpmsensor()
 
-except:
-	print "No sensors connected, shutting down script"
-	sys.exit()
-
+# Create serial connection for writing to the driver interface
+driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
+wheelCirc = 0.235 * 2 * math.pi
 
 # Create currenvoltage sensor object
 #voltagesensor = voltagesensor()
@@ -90,9 +91,22 @@ while(True):
 
 
 		# Collect rpm data to add them to database and send to ground base
-		rpm = rpmsensor.getRPMdata()
-		addToDatabase(rpm)
-		makeMessage(rpm, sendQueue)
+		rpmObject = rpmsensor.getRPMdata()
+		rpm = rpmObject.getData()
+		print(rpm)
+		print(type(rpm))
+		rps = rpm / 60
+			
+		speed = rps * wheelCirc * 3.6
+		speedToWrite = 1200 + int(round(speed))%100	
+ 		
+		#print(speedToWrite)
+		
+		# Schrijf de waarde voor de snelheid (km/h) naar het scherm
+		driverInterface.write(str(speedToWrite))
+
+		addToDatabase(rpmObject)
+		makeMessage(rpmObject, sendQueue)
 
 		# Collect voltage and current data to add them to database and send to ground base
 		#voltage = voltagesensor.getVoltageData()
