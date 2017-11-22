@@ -13,7 +13,7 @@ class rpmsensor():
 
 	def getRPMdata(self):
 		while(self.ser.in_waiting):
-			self.rpm = str(temp).rstrip()
+			self.rpm = str(self.ser.readline()).rstrip()
 			self.rpm.decode(encoding = 'ascii', errors = 'ignore')
 			self.tim = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 		
