@@ -13,6 +13,7 @@ from makeMessage import makeMessage
 from getRPMdata import rpmsensor
 #from voltagesensor import voltagesensor
 #from currentsensor import currentsensor
+from datetime import datetime
 import sys
 import MySQLdb
 import re
@@ -62,11 +63,11 @@ while True:
 		continue
 
 # Create RPM sensor object
-rpmsensor = rpmsensor()
+#rpmsensor = rpmsensor()
 
 # Create serial connection for writing to the driver interface
-driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
-wheelCirc = 0.235 * 2 * math.pi
+#driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
+#wheelCirc = 0.235 * 2 * math.pi
 
 # Create currenvoltage sensor object
 #voltagesensor = voltagesensor()
@@ -85,30 +86,31 @@ while(True):
 
 		
 		# Collect gps data to add them to database and send to ground base
-		gps = getGPSData(tn)
+		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+		gps = getGPSData(tn, ctime)
 		makeMessage(gps, sendQueue)
 		addToDatabase(gps)
 
 
 		# Collect rpm data to add them to database and send to ground base
-		rpmObject = rpmsensor.getRPMdata()
+		#rpmObject = rpmsensor.getRPMdata(ctime)
 		
-		try:
-			rpm = rpmObject.getData()
+		#try:
+			#rpm = rpmObject.getData()
 			#print(rpm)
 			
-			rps = int(rpm) / 60
-			speed = rps * wheelCirc * 3.6
-			speedToWrite = 1200 + int(round(speed))%100
+			#rps = int(rpm) / 60
+			#speed = rps * wheelCirc * 3.6
+			#speedToWrite = 1200 + int(round(speed))%100
 			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
-			driverInterface.write(str(speedToWrite))
+			#driverInterface.write(str(speedToWrite))
 		
-		except ValueError:
-			pass
+		#except ValueError:
+			#pass
 
 
-		addToDatabase(rpmObject)
-		makeMessage(rpmObject, sendQueue)
+		#addToDatabase(rpmObject)
+		#makeMessage(rpmObject, sendQueue)
 
 		# Collect voltage and current data to add them to database and send to ground base
 		#voltage = voltagesensor.getVoltageData()
@@ -119,7 +121,7 @@ while(True):
 		#makeMessage(current, sendQueue)		
 		
 
-		time.sleep(1)
+		time.sleep(0.2)
 
 	except KeyboardInterrupt:
 		sys.exit()

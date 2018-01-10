@@ -4,7 +4,7 @@ import pynmea2
 import re
 from GPS import GPS
 
-def getGPSData(tn):
+def getGPSData(tn, time):
 	while True:
 		incoming = tn.read_until("\n")
 		splitup = re.split(',', incoming)
@@ -14,7 +14,7 @@ def getGPSData(tn):
 				msg = pynmea2.parse(incoming)
 				lon = str(msg.lon) 
 				lat = str(msg.lat)
-				gps = GPS(lon, lat, msg.spd_over_grnd, msg.timestamp)
+				gps = GPS(lon, lat, msg.spd_over_grnd, time)
 				return gps
 				break
 		
