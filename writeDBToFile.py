@@ -5,7 +5,7 @@ import os
 def writeDBToFile():
 
 	# Open database connection
-	db = MySQLdb.connect("localhost","root","reverse","ecodata" )
+	db = MySQLdb.connect("localhost","root","reverse","ecoData" )
 	cursor = db.cursor()
 
 	# Set the name of the output file to a timestamp
