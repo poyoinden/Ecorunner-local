@@ -11,6 +11,7 @@ from getGPSData import getGPSData
 from cleardb import cleardb
 from makeMessage import makeMessage
 from getRPMdata import rpmsensor
+from writeDBToFile import writeDBToFile
 #from voltagesensor import voltagesensor
 #from currentsensor import currentsensor
 from datetime import datetime
@@ -124,5 +125,6 @@ while(True):
 		time.sleep(0.2)
 
 	except KeyboardInterrupt:
+		writeDBToFile()
 		sys.exit()
 
