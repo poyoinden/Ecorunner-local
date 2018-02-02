@@ -1,6 +1,7 @@
 import MySQLdb
 import datetime
 import os
+import os.path
 
 def writeDBToFile():
 
@@ -11,8 +12,14 @@ def writeDBToFile():
 	# Set the name of the output file to a timestamp
 	date = datetime.date.today().strftime('%d-%m-%y,')
 	time = datetime.datetime.now().strftime('%H:%M:%S')
+
+
+	save_path = '/home/pi/Gerda/logs'
 	name = date + time + ".txt"
-	output = open(name, "w")
+
+	completeName = os.path.join(save_path, name)
+
+	output = open(completeName, "w")
 
 	# Check the driver commands in the database
 	sql = "SELECT * FROM DriverInstructions"
