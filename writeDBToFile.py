@@ -1,104 +1,324 @@
 import MySQLdb
+import datetime
+import os
 
-# Open database connection
-db = MySQLdb.connect("localhost","root","reverse","mydata" )
-cursor = db.cursor()
+def writeDBToFile():
 
-# Check the driver commands in the database
-sql = "SELECT * FROM DriverInstructions"
+	# Open database connection
+	db = MySQLdb.connect("localhost","root","reverse","ecodata" )
+	cursor = db.cursor()
 
-try:
-   # Execute the SQL command
-   cursor.execute(sql)
-   # Fetch all the rows in a list of lists.
-   results = cursor.fetchall()
-   print "Driver instructions:"
-   for row in results:
-      i_id = row[0]
-      throttle = row[1]
-      displayswitch = row[2]
-      timestamp = row[3]
-      # Now print fetched result
-      print "id=%s,throttle=%s, displayswitch=%s, timestamp=%s" % \
-             (i_id, throttle, displayswitch, timestamp)
+	# Set the name of the output file to a timestamp
+	date = datetime.date.today().strftime('%d-%m-%y,')
+	time = datetime.datetime.now().strftime('%H:%M:%S')
+	name = date + time + ".txt"
+	output = open(name, "w")
 
-   print "----------------"
+	# Check the driver commands in the database
+	sql = "SELECT * FROM DriverInstructions"
 
-except:
-   print "Error: unable to fetch data"
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Driver instructions:"
+	   for row in results:
+	      i_id = row[0]
+	      throttle = row[1]
+	      displayswitch = row[2]
+	      timestamp = row[3]
+	      # Now print fetched result
+	      print>>output, "%s, %s, %s, %s" % \
+		     (i_id, throttle, displayswitch, timestamp)
 
-# Check the GB commands in the database
-sql = "SELECT * FROM GBInstructions"
+	   print>>output, ""
 
-try:
-   # Execute the SQL command
-   cursor.execute(sql)
-   # Fetch all the rows in a list of lists.
-   results = cursor.fetchall()
-   print "GB instructions:"
-   for row in results:
-      i_id = row[0]
-      fcpower = row[1]
-      throttleadv = row[2]
-      steeradv = row[3]
-      motorset = row[4]
-      timestamp = row[5]
-      # Now print fetched result
-      print "id=%s,fcpower=%s, throttleadvice=%s, steeradvice=%s, motorsettings=%s, timestamp=%s" % \
-             (i_id, fcpower, throttleadv, steeradv, motorset, timestamp)
-
-   print "----------------"
-
-except:
-   print "Error: unable to fetch data"
+	except:
+	   print "Error: unable to fetch data"
 
 
-# Check the strategy commands in the database
-sql = "SELECT * FROM StrategyInstructions"
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM StrategyInstructions"
 
-try:
-   # Execute the SQL command
-   cursor.execute(sql)
-   # Fetch all the rows in a list of lists.
-   results = cursor.fetchall()
-   print "Strategy instructions:"
-   for row in results:
-     i_id = row[0]
-     fcpower = row[1]
-     throttleadv = row[2]
-     motorset = row[3]
-     timestamp = row[4]
-     # Now print fetched result
-     print "id=%s,fcpower=%s, throttleadvice=%s, motorsettings=%s, timestamp=%s" % \
-            (i_id, fcpower, throttleadv, motorset, timestamp)
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Strategy instructions:"
+	   for row in results:
+	     i_id = row[0]
+	     fcpower = row[1]
+	     throttleadv = row[2]
+	     motorset = row[3]
+	     timestamp = row[4]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s, %s" % \
+		    (i_id, fcpower, throttleadv, motorset, timestamp)
 
-   print "----------------"
+	   print>>output, ""
 
-except:
-   print "Error: unable to fetch data"
+	except:
+	   print "Error: unable to fetch data"
 
-# Check the strategy commands in the database
-sql = "SELECT * FROM SensorData"
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Power1"
 
-try:
-   # Execute the SQL command
-   cursor.execute(sql)
-   # Fetch all the rows in a list of lists.
-   results = cursor.fetchall()
-   print "Sensor data:"
-   for row in results:
-     s_id = row[0]
-     s_type = row[1]
-     data = row[2]
-     timestamp = row[3]
-     # Now print fetched result
-     print "id=%s,type=%s, data=%s, timestamp=%s" % \
-            (s_id, s_type, data, timestamp)
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Power 1:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
 
-   print "----------------"
+	   print>>output, ""
 
-except:
-   print "Error: unable to fetch data"
+	except:
+	   print "Error: unable to fetch data"
 
-# disconnect from server
-db.close()
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Power2"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Power 2:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Power3"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Power 3:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Rpm1"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Rpm 1:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Rpm2"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Rpm 2:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Rpm3"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Rpm 3:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Voltage1"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Voltage 1:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Voltage2"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Voltage 2:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	   
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Current1"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Current 1"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM Current2"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "Current 2:"
+	   for row in results:
+	     s_id = row[0]
+	     s_type = row[1]
+	     data = row[2]
+	     timestamp = row[3]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s" % \
+		    (s_id, s_type, data, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# Check the strategy commands in the database
+	sql = "SELECT * FROM GPS"
+
+	try:
+	   # Execute the SQL command
+	   cursor.execute(sql)
+	   # Fetch all the rows in a list of lists.
+	   results = cursor.fetchall()
+	   print>>output, "GPS:"
+	   for row in results:
+	     s_id = row[0]
+	     longtitude = row[1]
+	     lattitude = row[2]
+	     speed = row[3]
+	     timestamp = row[4]
+	     # Now print fetched result
+	     print>>output, "%s, %s, %s, %s, %s" % \
+		    (s_id, longtitude, lattitude, speed, timestamp)
+
+	   print>>output, ""
+
+	except:
+	   print "Error: unable to fetch data"
+
+	# disconnect from server
+	print "\nDatabase written to file: " + name
+	db.close()
