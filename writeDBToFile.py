@@ -14,7 +14,7 @@ def writeDBToFile():
 	time = datetime.datetime.now().strftime('%H:%M:%S')
 
 
-	save_path = '/home/pi/Gerda/logs'
+	save_path = '/home/pi/Gerda2Eco/logs'
 	name = date + time + ".txt"
 
 	completeName = os.path.join(save_path, name)

@@ -114,8 +114,7 @@ while(True):
 
 		# Collect current data to add them to database and send to ground base
 		currentObject = currentsensor.getCurrentData(ctime)
-
-		current = rpmObject.getData()
+		current = currentObject.getData()
 
 		addToDatabase(currentObject)
 		makeMessage(currentObject, sendQueue)		
