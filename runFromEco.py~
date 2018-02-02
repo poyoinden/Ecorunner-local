@@ -11,8 +11,9 @@ from getGPSData import getGPSData
 from cleardb import cleardb
 from makeMessage import makeMessage
 from getRPMdata import rpmsensor
+from writeDBToFile import writeDBToFile
 #from voltagesensor import voltagesensor
-#from currentsensor import currentsensor
+from currentsensor import currentsensor
 from datetime import datetime
 import sys
 import MySQLdb
@@ -63,15 +64,14 @@ while True:
 		continue
 
 # Create RPM sensor object
-rpmsensor = rpmsensor()
+#rpmsensor = rpmsensor()
+
+# Create Current sensor object
+currentsensor = currentsensor()
 
 # Create serial connection for writing to the driver interface
-driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
-wheelCirc = 0.235 * 2 * math.pi
-
-# Create currenvoltage sensor object
-#voltagesensor = voltagesensor()
-#currentsensor = currentsensor()
+#driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
+#wheelCirc = 0.235 * 2 * math.pi
 
 # Clear the database before running
 cleardb()
@@ -93,32 +93,33 @@ while(True):
 
 
 		# Collect rpm data to add them to database and send to ground base
-		rpmObject = rpmsensor.getRPMdata(ctime)
+		#rpmObject = rpmsensor.getRPMdata(ctime)
 		
-		try:
-			rpm = rpmObject.getData()
-			print(rpm)
+		#try:
+			#rpm = rpmObject.getData()
+			#print(rpm)
 			
-			rps = int(rpm) / 60
-			speed = rps * wheelCirc * 3.6
-			speedToWrite = 1200 + int(round(speed))%100
+			#rps = int(rpm) / 60
+			#speed = rps * wheelCirc * 3.6
+			#speedToWrite = 1200 + int(round(speed))%100
 			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
-			driverInterface.write(str(speedToWrite))
+			#driverInterface.write(str(speedToWrite))
 		
-		except ValueError:
-			pass
+		#except ValueError:
+			#pass
 
 
-		addToDatabase(rpmObject)
-		makeMessage(rpmObject, sendQueue)
+		#addToDatabase(rpmObject)
+		#makeMessage(rpmObject, sendQueue)
 
-		# Collect voltage and current data to add them to database and send to ground base
-		#voltage = voltagesensor.getVoltageData()
-		#current = currentsensor.getCurrentData()
-		#addToDatabase(voltage)
-		#addToDatabase(current)
-		#makeMessage(voltage, sendQueue)
-		#makeMessage(current, sendQueue)		
+		# Collect current data to add them to database and send to ground base
+		currentObject = currentsensor.getCurrentData(ctime)
+
+		current = rpmObject.getData()
+
+
+		addToDatabase(currentObject)
+		makeMessage(currentObject, sendQueue)		
 		
 
 		time.sleep(0.2)
