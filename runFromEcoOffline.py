@@ -27,13 +27,19 @@ import telnetlib
 import serial
 import math
 
+def rpmToKMH(rpm, wheelCirc):			
+	rps = int(rpm) / 60
+	speed = rps * wheelCirc * 3.6
+	speedToWrite = 1200 + int(round(speed))%100
+	
+	return speedToWrite
+
+
 # Create RPM sensor object
 rpmsensor = rpmsensor()
 
 # Create Current sensor object
 currentsensor = currentsensor()
-
-
 
 # Create serial connection for writing to the driver interface
 driverInterface = throttleSensor()
@@ -82,14 +88,3 @@ while(True):
 
 	except KeyboardInterrupt:
 		sys.exit()
-
-
-
-
-def rpmToKMH(rpm, wheelCirc):			
-	rps = int(rpm) / 60
-	speed = rps * wheelCirc * 3.6
-	speedToWrite = 1200 + int(round(speed))%100
-	
-	return speedToWrite
-
