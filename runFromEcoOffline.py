@@ -71,7 +71,7 @@ while(True):
 
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
-		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57
+		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57:
 			writeDBToFile()
 			lastLogTime = timeNow
 
