@@ -14,7 +14,7 @@ class throttleSensor():
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
-				print incoming
+				print "throttle: " + incoming
 				self.tim = time
 		
 			return SensorData('1', 'throttle', self.throttle, self.tim)

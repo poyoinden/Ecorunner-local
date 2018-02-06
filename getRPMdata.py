@@ -14,7 +14,7 @@ class rpmsensor():
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
-				print incoming
+				print "rpm: " + incoming
 				
 				#self.rpm = int(incoming)
 				
