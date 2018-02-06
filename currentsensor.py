@@ -16,7 +16,7 @@ class currentsensor():
 				incoming = self.ser.readline().rstrip()
 				splitted = list(incoming)
 				res = splitted[10] + splitted[11] + splitted[12] + splitted[13]
-				print res
+				print "current: " + res
 				self.cur = float(res)				
 				self.tim = time
 		
