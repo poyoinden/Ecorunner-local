@@ -6,7 +6,7 @@ import re
 
 class currentsensor():
 	def __init__(self):
-		self.ser = serial.Serial(baudrate = 9600, port = '/dev/ttyUSB0', timeout = 0)
+		self.ser = serial.Serial(baudrate = 9600, port = '/dev/ttyACM0', timeout = 0)
 		self.cur = -1
 		self.tim = -1
 
