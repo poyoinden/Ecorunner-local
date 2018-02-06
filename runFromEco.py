@@ -64,7 +64,7 @@ while True:
 		continue
 
 # Create RPM sensor object
-#rpmsensor = rpmsensor()
+rpmsensor = rpmsensor()
 
 # Create Current sensor object
 currentsensor = currentsensor()
@@ -93,10 +93,10 @@ while(True):
 
 
 		# Collect rpm data to add them to database and send to ground base
-		#rpmObject = rpmsensor.getRPMdata(ctime)
+		rpmObject = rpmsensor.getRPMdata(ctime)
 		
-		#try:
-			#rpm = rpmObject.getData()
+		try:
+			rpm = rpmObject.getData()
 			#print(rpm)
 			
 			#rps = int(rpm) / 60
@@ -105,20 +105,24 @@ while(True):
 			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
 			#driverInterface.write(str(speedToWrite))
 		
-		#except ValueError:
-			#pass
+		except ValueError:
+			pass
 
 
-		#addToDatabase(rpmObject)
-		#makeMessage(rpmObject, sendQueue)
+		addToDatabase(rpmObject)
+		makeMessage(rpmObject, sendQueue)
 
 		# Collect current data to add them to database and send to ground base
-		currentObject = currentsensor.getCurrentData(ctime)
-		current = currentObject.getData()
+		try:
+			currentObject = currentsensor.getCurrentData(ctime)
+			current = currentObject.getData()
 
-		addToDatabase(currentObject)
-		makeMessage(currentObject, sendQueue)		
+			addToDatabase(currentObject)
+			makeMessage(currentObject, sendQueue)		
 		
+		except AttributeError:
+			print "Error in the current object class --> look at it"	
+			
 
 		time.sleep(0.2)
 
