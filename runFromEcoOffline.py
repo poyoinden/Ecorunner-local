@@ -82,5 +82,8 @@ while(True):
 	except ValueError:
 		print "Wrong value for the rpm data!"
 
+	except AttributeError:
+		print "-----------------------------------------------"
+
 	except KeyboardInterrupt:
 		sys.exit()

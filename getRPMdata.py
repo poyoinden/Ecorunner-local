@@ -22,10 +22,7 @@ class rpmsensor():
 			return SensorData('2', 'rpm', self.rpm, self.tim)
 
 		except IndexError:
-			print "Wrong RPM value, nothing sent"	
-
-		except AttributeError:
-			return SensorData('2', 'wrong rpm', self.rpm, self.tim)		
+			print "Wrong RPM value, nothing sent"		
 
 		except ValueError:
 			print "wrong RPM value, could not cast to int"
