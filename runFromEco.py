@@ -62,8 +62,6 @@ while True:
 		time.sleep(5)
 		continue
 
-print "Connected to the GPS and Queue!"
-
 # Create RPM sensor object
 rpmsensor = rpmsensor()
 
