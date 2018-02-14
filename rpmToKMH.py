@@ -3,7 +3,7 @@ import math
 
 def rpmToKMH(rpm):
 	if(rpm == -1):
-		return 0
+		return 1200
 
 	else:
 		wheelCirc = 0.235 * 2 * math.pi

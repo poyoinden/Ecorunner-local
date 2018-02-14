@@ -86,7 +86,7 @@ while(True):
 
 		# write the speed in km/h to the screen
 		driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
-		print "kmh: " + str(rpmToKMH(rpmObject.getData()))
+		print "kmh: " + str(rpmToKMH(rpmObject.getData()) - 1200)
 
 		# Collect throttle data to add them to database and send to ground base
 		throttleObject = driverInterface.getThrottledata(ctime)
