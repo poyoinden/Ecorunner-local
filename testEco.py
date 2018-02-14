@@ -89,7 +89,7 @@ class TestAddToDB(unittest.TestCase):
 		db.close()
 		cleardb()
 
-  	      	self.assertTrue(dbId == 1 and dbType == "power" and dbData == "7" and dbTimestamp == "123.456.789")
+  	      	self.assertTrue(dbId == 1 and dbType == "throttle" and dbData == "7" and dbTimestamp == "123.456.789")
 
 
 	
@@ -100,7 +100,7 @@ class TestAddToDB(unittest.TestCase):
 		cursor = db.cursor()
 
 		# Add a information to the database
-		dr = SensorData("4", "rpm", 7, "123.456.789")
+		dr = SensorData("2", "rpm", 7, "123.456.789")
 		addToDatabase(dr)
 
 		# Get information from the database
