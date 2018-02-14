@@ -77,4 +77,5 @@ while(True):
 		print "-----------------------------------------------"
 
 	except KeyboardInterrupt:
+		writeDBToFile()
 		sys.exit()

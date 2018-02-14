@@ -11,6 +11,7 @@ from writeDBToFile import writeDBToFile
 #from voltagesensor import voltagesensor
 from currentsensor import currentsensor
 from datetime import datetime
+from rpmToKMH import rpmToKMH
 import sys
 import MySQLdb
 import re
@@ -26,22 +27,10 @@ while True:
 	try:
 		# Open connection to the amazon sqs
 		conn = boto.sqs.connect_to_region("eu-central-1", aws_access_key_id = "AKIAI5H2RJ4GG4VZGLDQ", aws_secret_access_key = "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")
-		tn = telnetlib.Telnet("192.168.50.1", 60660)
-		
+		sendQueue = conn.get_queue('Eco2GB')
+
 		# Open connection to the gps server
-		while True:
-			sendQueue = conn.get_queue('Eco2GB')
-
-			if sendQueue is None:
-				print "Connecting to GPS and queue servers..."
-				time.sleep(3)	
-				continue
-			else:
-				print "Connected to the GPS and queue servers!"
-				break
-
-
-		break
+		tn = telnetlib.Telnet("192.168.50.1", 60660)
 	
 	except EOFError:
 		print "Connection to telnet lost, trying again..."
@@ -58,6 +47,8 @@ while True:
 		time.sleep(5)
 		continue
 
+print "Connected to the GPS and Queue!"
+
 # Create RPM sensor object
 rpmsensor = rpmsensor()
 
@@ -65,54 +56,49 @@ rpmsensor = rpmsensor()
 currentsensor = currentsensor()
 
 # Create serial connection for writing to the driver interface
-#driverInterface = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB1', timeout = 0)
-#wheelCirc = 0.235 * 2 * math.pi
+driverInterface = throttleSensor()
 
 # Clear the database before running
 cleardb()
 
+lastLogTime = datetime.now().strftime('%M')
 while(True):
 	try:
-		# Collect gps data to add them to database and send to ground base
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-		gps = getGPSData(tn, ctime)
-		makeMessage(gps, sendQueue)
-		addToDatabase(gps)
-
 
 		# Collect rpm data to add them to database and send to ground base
 		rpmObject = rpmsensor.getRPMdata(ctime)
-		
-		try:
-			rpm = rpmObject.getData()
-			#print(rpm)
-			
-			#rps = int(rpm) / 60
-			#speed = rps * wheelCirc * 3.6
-			#speedToWrite = 1200 + int(round(speed))%100
-			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
-			#driverInterface.write(str(speedToWrite))
-		
-		except ValueError:
-			pass
-
-
-		addToDatabase(rpmObject)
 		makeMessage(rpmObject, sendQueue)
+		addToDatabase(rpmObject)
+
+		# write the speed in km/h to the screen
+		driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
+		print "kmh: " + str(rpmToKMH(rpmObject.getData()))
+
+		# Collect throttle data to add them to database and send to ground base
+		throttleObject = driverInterface.getThrottledata(ctime)
+		makeMessage(throttleObject, sendQueue)	
+		addToDatabase(throttleObject)
 
 		# Collect current data to add them to database and send to ground base
-		try:
-			currentObject = currentsensor.getCurrentData(ctime)
-			current = currentObject.getData()
+		currentObject = currentsensor.getCurrentData(ctime)
+		makeMessage(currentObject, sendQueue)
+		addToDatabase(currentObject)
 
-			addToDatabase(currentObject)
-			makeMessage(currentObject, sendQueue)		
-		
-		except AttributeError:
-			print "Error in the current object class --> look at it"	
-			
+
+		# Check if 3 minutes have passed to write the log
+		timeNow = datetime.now().strftime('%M')
+		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57:
+			writeDBToFile()
+			lastLogTime = timeNow
 
 		time.sleep(0.2)
+
+	except ValueError:
+		print "Wrong value for the rpm data!"
+
+	except AttributeError:
+		print "-----------------------------------------------"
 
 	except KeyboardInterrupt:
 		writeDBToFile()
