@@ -1,8 +1,4 @@
 from __future__ import division
-from Instruction import Instruction
-from GBInstruction import GBInstruction
-from DriverInstruction import DriverInstruction
-from StrategyInstruction import StrategyInstruction
 from SensorData import SensorData
 from parseMessage import parseMessage
 from readMessage import nextMessage
@@ -34,10 +30,9 @@ while True:
 		
 		# Open connection to the gps server
 		while True:
-			receiveQueue = conn.get_queue('GB2Eco')
 			sendQueue = conn.get_queue('Eco2GB')
 
-			if sendQueue is None or receiveQueue is None:
+			if sendQueue is None:
 				print "Connecting to GPS and queue servers..."
 				time.sleep(3)	
 				continue
@@ -78,13 +73,6 @@ cleardb()
 
 while(True):
 	try:
-
-		# Collect incoming message and add them to the database
-		message = nextMessage(receiveQueue)
-		""" To-do: Do something with that message """
-		addToDatabase(message)
-
-		
 		# Collect gps data to add them to database and send to ground base
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 		gps = getGPSData(tn, ctime)

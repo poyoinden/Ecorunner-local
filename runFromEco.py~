@@ -1,8 +1,4 @@
 from __future__ import division
-from Instruction import Instruction
-from GBInstruction import GBInstruction
-from DriverInstruction import DriverInstruction
-from StrategyInstruction import StrategyInstruction
 from SensorData import SensorData
 from parseMessage import parseMessage
 from readMessage import nextMessage
@@ -34,10 +30,9 @@ while True:
 		
 		# Open connection to the gps server
 		while True:
-			receiveQueue = conn.get_queue('GB2Eco')
 			sendQueue = conn.get_queue('Eco2GB')
 
-			if sendQueue is None or receiveQueue is None:
+			if sendQueue is None:
 				print "Connecting to GPS and queue servers..."
 				time.sleep(3)	
 				continue
@@ -64,7 +59,7 @@ while True:
 		continue
 
 # Create RPM sensor object
-#rpmsensor = rpmsensor()
+rpmsensor = rpmsensor()
 
 # Create Current sensor object
 currentsensor = currentsensor()
@@ -93,10 +88,10 @@ while(True):
 
 
 		# Collect rpm data to add them to database and send to ground base
-		#rpmObject = rpmsensor.getRPMdata(ctime)
+		rpmObject = rpmsensor.getRPMdata(ctime)
 		
-		#try:
-			#rpm = rpmObject.getData()
+		try:
+			rpm = rpmObject.getData()
 			#print(rpm)
 			
 			#rps = int(rpm) / 60
@@ -105,22 +100,24 @@ while(True):
 			# Schrijf de waarde voor de snelheid (km/h) naar het scherm
 			#driverInterface.write(str(speedToWrite))
 		
-		#except ValueError:
-			#pass
+		except ValueError:
+			pass
 
 
-		#addToDatabase(rpmObject)
-		#makeMessage(rpmObject, sendQueue)
+		addToDatabase(rpmObject)
+		makeMessage(rpmObject, sendQueue)
 
 		# Collect current data to add them to database and send to ground base
-		currentObject = currentsensor.getCurrentData(ctime)
+		try:
+			currentObject = currentsensor.getCurrentData(ctime)
+			current = currentObject.getData()
 
-		current = rpmObject.getData()
-
-
-		addToDatabase(currentObject)
-		makeMessage(currentObject, sendQueue)		
+			addToDatabase(currentObject)
+			makeMessage(currentObject, sendQueue)		
 		
+		except AttributeError:
+			print "Error in the current object class --> look at it"	
+			
 
 		time.sleep(0.2)
 

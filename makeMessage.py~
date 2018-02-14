@@ -1,3 +1,7 @@
+from Instruction import Instruction
+from GBInstruction import GBInstruction
+from DriverInstruction import DriverInstruction
+from StrategyInstruction import StrategyInstruction
 from parseMessage import parseMessage
 from writeMessage import writeMessage
 from GPS import GPS

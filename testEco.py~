@@ -218,7 +218,7 @@ class TestAddToDB(unittest.TestCase):
   	      	self.assertTrue(dbId == 1 and dbType == "voltage" and dbData == "7" and dbTimestamp == "123.456.789")
 
 
-	# Test adding data from the GPS sensor to the database
+	# Test adding data from the first voltage sensor to the database
 	def testAddGPS(self):
 		# Open connection with the database		
 		db = MySQLdb.connect("localhost","root","reverse","ecoData")
@@ -243,6 +243,29 @@ class TestAddToDB(unittest.TestCase):
 
   	      	self.assertTrue(dbId == 1 and dbLong == "1234.567865" and dbLat == "098765.4321" and dbSpe == 7.20 and dbTimestamp == "123.456.789")
 
+
+""" Test class for the parseMessage module """
+class TestParseMessage(unittest.TestCase):
+
+	# Test if the right object is created
+	def testTypeOfGBInstruction(self):
+		self.assertTrue(isinstance(parseMessage('gb, 2, 3, 4, 5, 8'), GBInstruction))
+
+	# Test for a correct instantiation of GBInput
+	def testCorrectGBInstruction(self):
+        	self.assertEqual(parseMessage('gb, 2, 3, 4, 5, 8').toString(), 'type: GB, fc Power:  2, throttle advice:  3, Steer advice:  4, motor settings:  5, timestamp:  8')
+
+	# Test for an incorrect instantiation of GBInput
+	def testIncorrectGBInstruction(self):
+        	self.assertNotEqual(parseMessage('gb, 2, 3, 4, 5, 8'), 'type: GB, fc Power:  5, throttle advice:  2, Steer advice:  7, motor settings:  1, timestamp:  8')
+
+	# Test for an incorrect length of GBInput
+	def testIncorrectGBLength(self):
+        	self.assertEqual(parseMessage('gb, 2, 3, 4, 5, 8, 5'), None)
+	
+	# Test if the right exception is handled on incorrect input
+	def testCatchIncorrectOveralFormat(self):
+		self.assertRaises(IndexError, parseMessage('Some incorrect input'))
 
 
 """ Test class for the writeMessage module """

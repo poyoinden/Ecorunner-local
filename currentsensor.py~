@@ -6,22 +6,24 @@ import re
 
 class currentsensor():
 	def __init__(self):
-		self.ser = serial.Serial(baudrate = 9600, port = 'dev/ttyUSB2', timeout = 0)
+		self.ser = serial.Serial(baudrate = 9600, port = '/dev/ttyUSB0', timeout = 0)
 		self.cur = -1
-		self.tim = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+		self.tim = -1
 
-	def getCurrentData(self):
+	def getCurrentData(self, time):
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
-				splitUp = re.split(',', incoming)
-				self.cur = str(splitUp[0])
-				#print str(splitUp[0])
-				self.tim = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+				splitted = list(incoming)
+				res = splitted[10] + splitted[11] + splitted[12] + splitted[13]
+				# print "current: " + res
+				self.cur = float(res)				
+				self.tim = time
 		
 			return SensorData('9', 'Current', self.cur, self.tim)
 		
 		except IndexError:
 			print "Wrong current value, nothing sent"			
-
-
+		
+		except ValueError:
+			print "Wrong value string for the current"

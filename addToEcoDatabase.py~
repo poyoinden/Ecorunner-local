@@ -1,3 +1,7 @@
+from Instruction import Instruction
+from GBInstruction import GBInstruction
+from DriverInstruction import DriverInstruction
+from StrategyInstruction import StrategyInstruction
 from SensorData import SensorData
 from GPS import GPS
 import boto.sqs

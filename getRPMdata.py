@@ -19,7 +19,7 @@ class rpmsensor():
 				self.rpm = int(incoming)			
 				self.tim = time
 		
-			return SensorData('4', 'rpm', self.rpm, self.tim)
+			return SensorData('2', 'rpm', self.rpm, self.tim)
 
 		except IndexError:
 			print "Wrong RPM value, nothing sent"			

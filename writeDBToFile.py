@@ -21,110 +21,15 @@ def writeDBToFile():
 
 	output = open(completeName, "w")
 
-	# Check the driver commands in the database
-	sql = "SELECT * FROM DriverInstructions"
+	# Check the throttle data in the database
+	sql = "SELECT * FROM Throttle"
 
 	try:
 	   # Execute the SQL command
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Driver instructions:"
-	   for row in results:
-	      i_id = row[0]
-	      throttle = row[1]
-	      displayswitch = row[2]
-	      timestamp = row[3]
-	      # Now print fetched result
-	      print>>output, "%s, %s, %s, %s" % \
-		     (i_id, throttle, displayswitch, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM StrategyInstructions"
-
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Strategy instructions:"
-	   for row in results:
-	     i_id = row[0]
-	     fcpower = row[1]
-	     throttleadv = row[2]
-	     motorset = row[3]
-	     timestamp = row[4]
-	     # Now print fetched result
-	     print>>output, "%s, %s, %s, %s, %s" % \
-		    (i_id, fcpower, throttleadv, motorset, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Power1"
-
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Power 1:"
-	   for row in results:
-	     s_id = row[0]
-	     s_type = row[1]
-	     data = row[2]
-	     timestamp = row[3]
-	     # Now print fetched result
-	     print>>output, "%s, %s, %s, %s" % \
-		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Power2"
-
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Power 2:"
-	   for row in results:
-	     s_id = row[0]
-	     s_type = row[1]
-	     data = row[2]
-	     timestamp = row[3]
-	     # Now print fetched result
-	     print>>output, "%s, %s, %s, %s" % \
-		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Power3"
-
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Power 3:"
+	   print>>output, "Throttle:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -163,15 +68,15 @@ def writeDBToFile():
 	except:
 	   print "Error: unable to fetch data"
 
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Rpm2"
+	# Check the current1 data in the database
+	sql = "SELECT * FROM Current1"
 
 	try:
 	   # Execute the SQL command
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Rpm 2:"
+	   print>>output, "Current 1"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -186,15 +91,15 @@ def writeDBToFile():
 	except:
 	   print "Error: unable to fetch data"
 
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Rpm3"
+	# Check the current2 data in the database
+	sql = "SELECT * FROM Current2"
 
 	try:
 	   # Execute the SQL command
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Rpm 3:"
+	   print>>output, "Current 2:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -209,7 +114,7 @@ def writeDBToFile():
 	except:
 	   print "Error: unable to fetch data"
 
-	# Check the strategy commands in the database
+	# Check the voltage1 data in the database
 	sql = "SELECT * FROM Voltage1"
 
 	try:
@@ -232,7 +137,8 @@ def writeDBToFile():
 	except:
 	   print "Error: unable to fetch data"
 
-	# Check the strategy commands in the database
+
+	# Check the voltage2 data in the database
 	sql = "SELECT * FROM Voltage2"
 
 	try:
@@ -256,53 +162,8 @@ def writeDBToFile():
 	except:
 	   print "Error: unable to fetch data"
 
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Current1"
 
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Current 1"
-	   for row in results:
-	     s_id = row[0]
-	     s_type = row[1]
-	     data = row[2]
-	     timestamp = row[3]
-	     # Now print fetched result
-	     print>>output, "%s, %s, %s, %s" % \
-		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-	# Check the strategy commands in the database
-	sql = "SELECT * FROM Current2"
-
-	try:
-	   # Execute the SQL command
-	   cursor.execute(sql)
-	   # Fetch all the rows in a list of lists.
-	   results = cursor.fetchall()
-	   print>>output, "Current 2:"
-	   for row in results:
-	     s_id = row[0]
-	     s_type = row[1]
-	     data = row[2]
-	     timestamp = row[3]
-	     # Now print fetched result
-	     print>>output, "%s, %s, %s, %s" % \
-		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
-
-	except:
-	   print "Error: unable to fetch data"
-
-	# Check the strategy commands in the database
+	# Check the GPS data in the database
 	sql = "SELECT * FROM GPS"
 
 	try:

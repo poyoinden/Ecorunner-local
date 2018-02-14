@@ -20,7 +20,7 @@ class currentsensor():
 				self.cur = float(res)				
 				self.tim = time
 		
-			return SensorData('9', 'Current', self.cur, self.tim)
+			return SensorData('3', 'Current', self.cur, self.tim)
 		
 		except IndexError:
 			print "Wrong current value, nothing sent"			
