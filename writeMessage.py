@@ -1,17 +1,12 @@
 import boto.sqs
 from boto.sqs.message import Message
-from DriverInstruction import DriverInstruction
 from SensorData import SensorData
-from Instruction import Instruction
-from GBInstruction import GBInstruction
-from DriverInstruction import DriverInstruction
-from StrategyInstruction import StrategyInstruction
 from GPS import GPS
 
 """ Write a message from Ecorunner to ground base """
 def writeMessage(objectToSend):
 	# Write the message for sensor data
-	elif isinstance(objectToSend, SensorData):
+	if isinstance(objectToSend, SensorData):
 		mString = "se," + str(objectToSend.getSensorId()) + "," + str(objectToSend.getMsgType()) + "," + str(objectToSend.getData()) + "," + str(objectToSend.getTimestamp())
 		return mString	
 
