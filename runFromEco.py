@@ -26,7 +26,7 @@ import math
 while True:
 	try:
 		# Open connection to the amazon sqs
-		conn = boto.sqs.connect_to_region("eu-central-1", aws_access_key_id = "AKIAJAR3NWUEFXUP2DUA", aws_secret_access_key = "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")
+		conn = boto.sqs.connect_to_region("eu-west-2", aws_access_key_id = "AKIAJAR3NWUEFXUP2DUA", aws_secret_access_key = "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")
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
