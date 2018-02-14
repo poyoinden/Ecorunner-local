@@ -1,7 +1,6 @@
 import unittest
 import sys
 import MySQLdb
-
 from writeMessage import writeMessage
 from parseMessage import parseMessage
 from SensorData import SensorData
@@ -248,25 +247,11 @@ class TestAddToDB(unittest.TestCase):
 """ Test class for the writeMessage module """
 class TestWriteMessage(unittest.TestCase):		
 
-	# Test for an incorrect object
-	def testIncorrectObject(self):
-		gb = GBInstruction(1, 2, 3, 4, 5)
-  	      	self.assertEqual(writeMessage(gb), None)
-
 	# Test with a correct gps object
 	def testCorrectGPS(self):
 		gps = GPS(1, 2, 3, 4)
 		self.assertEqual(writeMessage(gps), "gp,1,2,3,4")
 
-	# Test with a correct driver instruction object
-	def testCorrectDriver(self):
-		dri = DriverInstruction(1, 2, 3)
-		self.assertEqual(writeMessage(dri), "dr,1,2,3")
-
-	# Test with a correct strategy instruction object
-	def testCorrectStrategy(self):
-		st = StrategyInstruction(1, 2, 3, 4)
-		self.assertEqual(writeMessage(st), "st,1,2,3,4")
 
 	# Test with a correct sensor data object
 	def testCorrectSensor(self):
