@@ -10,6 +10,7 @@ from getRPMdata import rpmsensor
 from writeDBToFile import writeDBToFile
 #from voltagesensor import voltagesensor
 from currentsensor import currentsensor
+from throttleSensor import throttleSensor
 from datetime import datetime
 from rpmToKMH import rpmToKMH
 import sys
@@ -30,21 +31,7 @@ while True:
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
-
-		# Open connection to the gps server
-		while True:
-			sendQueue = conn.get_queue('Eco2GB')
-
-			if sendQueue is None:
-				print "Connecting to the queue..."
-				time.sleep(3)	
-				continue
-			else:
-				print "Connected to the GPS and queue servers!"
-				break
-
-
-		break
+		sendQueue = conn.get_queue('Eco2GB')
 	
 	except EOFError:
 		print "Connection to telnet lost, trying again..."
