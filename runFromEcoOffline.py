@@ -82,8 +82,5 @@ while(True):
 	except ValueError:
 		print "Wrong value for the rpm data!"
 
-	except AttributeError:
-		print "----- RPM object does not exist for some reason -----"
-
 	except KeyboardInterrupt:
 		sys.exit()
