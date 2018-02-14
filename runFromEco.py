@@ -31,7 +31,21 @@ while True:
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
-		sendQueue = conn.get_queue('Eco2GB')
+
+		# Open connection to the sqs
+		while True:
+			sendQueue = conn.get_queue('Eco2GB')
+
+			if sendQueue is None:
+				print "Connecting to the queue..."
+				time.sleep(3)	
+				continue
+			else:
+				print "Connected to the GPS and queue servers!"
+				break
+
+
+		break
 	
 	except EOFError:
 		print "Connection to telnet lost, trying again..."
