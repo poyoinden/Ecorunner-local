@@ -12,6 +12,7 @@ from writeDBToFile import writeDBToFile
 from currentsensor import currentsensor
 from throttleSensor import throttleSensor
 from datetime import datetime
+from rpmToKMH import rpmToKMH
 import sys
 import MySQLdb
 import re
@@ -21,15 +22,6 @@ import boto.sqs
 from boto.sqs.message import Message
 import telnetlib
 import serial
-import math
-
-def rpmToKMH(rpm, wheelCirc):			
-	rps = int(rpm) / 60
-	speed = rps * wheelCirc * 3.6
-	speedToWrite = 1200 + int(round(speed))%100
-	
-	return speedToWrite
-
 
 # Create RPM sensor object
 rpmsensor = rpmsensor()
@@ -39,7 +31,6 @@ currentsensor = currentsensor()
 
 # Create serial connection for writing to the driver interface
 driverInterface = throttleSensor()
-wheelCirc = 0.235 * 2 * math.pi
 
 # Clear the database before running
 cleardb()
@@ -54,7 +45,7 @@ while(True):
 		rpm = rpmObject.getData()
 
 		# write the speed in km/h to the screen
-		driverInterface.getSerial().write(str(rpmToKMH(rpm, wheelCirc)))
+		driverInterface.getSerial().write(str(rpmToKMH(rpm)))
 		
 		addToDatabase(rpmObject)
 
