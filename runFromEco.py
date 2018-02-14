@@ -27,10 +27,24 @@ while True:
 	try:
 		# Open connection to the amazon sqs
 		conn = boto.sqs.connect_to_region("eu-central-1", aws_access_key_id = "AKIAI5H2RJ4GG4VZGLDQ", aws_secret_access_key = "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")
-		sendQueue = conn.get_queue('Eco2GB')
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
+
+		# Open connection to the gps server
+		while True:
+			sendQueue = conn.get_queue('Eco2GB')
+
+			if sendQueue is None:
+				print "Connecting to the queue..."
+				time.sleep(3)	
+				continue
+			else:
+				print "Connected to the GPS and queue servers!"
+				break
+
+
+		break
 	
 	except EOFError:
 		print "Connection to telnet lost, trying again..."
