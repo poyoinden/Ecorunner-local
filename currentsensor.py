@@ -14,10 +14,9 @@ class currentsensor():
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
-				splitted = list(incoming)
-				res = splitted[10] + splitted[11] + splitted[12] + splitted[13]
-				# print "current: " + res
-				self.cur = float(res)				
+				#splitted = list(incoming)
+				#res = splitted[10] + splitted[11] + splitted[12] + splitted[13]
+				self.cur = float(incoming)				
 				self.tim = time
 		
 			return SensorData('3', 'Current', self.cur, self.tim)

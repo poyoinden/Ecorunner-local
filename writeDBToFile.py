@@ -166,5 +166,5 @@ def writeDBToFile():
 	   print "Error: unable to fetch data"
 
 	# disconnect from server
-	print "\nDatabase written to file: " + name
+	print "Database written to file: " + name
 	db.close()
