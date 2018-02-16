@@ -29,7 +29,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Throttle:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -38,8 +37,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
@@ -53,7 +50,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Rpm 1:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -62,8 +58,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
@@ -76,7 +70,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Current 1"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -85,8 +78,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
@@ -99,7 +90,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Current 2:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -108,8 +98,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
@@ -122,7 +110,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Voltage 1:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -131,8 +118,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
@@ -146,7 +131,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "Voltage 2:"
 	   for row in results:
 	     s_id = row[0]
 	     s_type = row[1]
@@ -155,9 +139,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s" % \
 		    (s_id, s_type, data, timestamp)
-
-	   print>>output, ""
-
 	   
 	except:
 	   print "Error: unable to fetch data"
@@ -171,7 +152,6 @@ def writeDBToFile():
 	   cursor.execute(sql)
 	   # Fetch all the rows in a list of lists.
 	   results = cursor.fetchall()
-	   print>>output, "GPS:"
 	   for row in results:
 	     s_id = row[0]
 	     longtitude = row[1]
@@ -181,8 +161,6 @@ def writeDBToFile():
 	     # Now print fetched result
 	     print>>output, "%s, %s, %s, %s, %s" % \
 		    (s_id, longtitude, lattitude, speed, timestamp)
-
-	   print>>output, ""
 
 	except:
 	   print "Error: unable to fetch data"
