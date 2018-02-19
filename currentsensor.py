@@ -15,7 +15,6 @@ class currentsensor():
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
 				res = incoming.split(",")
-				print res[0]
 				self.cur = float(res[0])				
 				self.tim = time
 		
@@ -32,7 +31,6 @@ class currentsensor():
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
 				res = incoming.split(",")
-				print res[1]
 				self.cur = float(res[1])			
 				self.tim = time
 	
