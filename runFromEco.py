@@ -92,10 +92,15 @@ while(True):
 		makeMessage(throttleObject, sendQueue)	
 		addToDatabase(throttleObject)
 
-		# Collect current data to add them to database and send to ground base
+		# Collect current data 1 to add them to database and send to ground base
 		currentObject = currentsensor.getCurrentData(ctime)
 		makeMessage(currentObject, sendQueue)
 		addToDatabase(currentObject)
+
+		# Collect current data 1 to add them to database and send to ground base
+		currentObject2 = currentsensor.getCurrentData2(ctime)
+		makeMessage(currentObject2, sendQueue)
+		addToDatabase(currentObject2)
 
 
 		# Check if 3 minutes have passed to write the log
