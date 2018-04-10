@@ -66,7 +66,7 @@ while True:
 rpmsensor = rpmsensor()
 
 # Create serial connection for writing to the driver interface
-driverInterface = throttleSensor()
+#driverInterface = throttleSensor()
 
 # Clear the database before running
 cleardb()
