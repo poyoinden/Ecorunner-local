@@ -15,7 +15,7 @@ class rpmsensor():
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
 				print incoming
-				self.rpm = int(incoming)			
+				self.rpm = incoming		
 				self.tim = time
 		
 			return SensorData('2', 'rpm', self.rpm, self.tim)
