@@ -65,9 +65,6 @@ while True:
 # Create RPM sensor object
 rpmsensor = rpmsensor()
 
-# Create Current sensor object
-currentsensor = currentsensor()
-
 # Create serial connection for writing to the driver interface
 driverInterface = throttleSensor()
 
@@ -85,22 +82,22 @@ while(True):
 		addToDatabase(rpmObject)
 
 		# write the speed in km/h to the screen
-		driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
+		#driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
 
 		# Collect throttle data to add them to database and send to ground base
-		throttleObject = driverInterface.getThrottledata(ctime)
-		makeMessage(throttleObject, sendQueue)	
-		addToDatabase(throttleObject)
+		#throttleObject = driverInterface.getThrottledata(ctime)
+		#makeMessage(throttleObject, sendQueue)	
+		#addToDatabase(throttleObject)
 
 		# Collect current data 1 to add them to database and send to ground base
-		currentObject = currentsensor.getCurrentData(ctime)
-		makeMessage(currentObject, sendQueue)
-		addToDatabase(currentObject)
+		#currentObject = currentsensor.getCurrentData(ctime)
+		#makeMessage(currentObject, sendQueue)
+		#addToDatabase(currentObject)
 
 		# Collect current data 1 to add them to database and send to ground base
-		currentObject2 = currentsensor.getCurrentData2(ctime)
-		makeMessage(currentObject2, sendQueue)
-		addToDatabase(currentObject2)
+		#currentObject2 = currentsensor.getCurrentData2(ctime)
+		#makeMessage(currentObject2, sendQueue)
+		#addToDatabase(currentObject2)
 
 
 		# Check if 3 minutes have passed to write the log

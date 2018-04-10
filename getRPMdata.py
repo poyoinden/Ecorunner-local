@@ -5,7 +5,7 @@ from datetime import datetime
 
 class rpmsensor():
 	def __init__(self):	
-		self.ser = serial.Serial(baudrate = 9600, port = '/dev/ttyACM0', timeout = 0)
+		self.ser = serial.Serial(baudrate = 115200, port = '/dev/teensy', timeout = 0)
 		self.rpm = -1
 		self.tim = -1
 	
@@ -14,6 +14,7 @@ class rpmsensor():
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
+				print incoming
 				self.rpm = int(incoming)			
 				self.tim = time
 		
