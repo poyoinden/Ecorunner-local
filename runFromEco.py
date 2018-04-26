@@ -154,7 +154,7 @@ while(True):
 			writeDBToFile()
 			lastLogTime = timeNow
 #		print "Flag 5."
-		time.sleep(0.5)
+		time.sleep(0.2)
 #		print "End of loop."
 	except ValueError:
 		print "Wrong value for the rpm data!"

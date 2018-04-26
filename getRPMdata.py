@@ -23,6 +23,8 @@ class sensorPacket():
 			print incoming
 			#print "Length:" + str(len(incoming))
 
+			self.tim = time
+
 			print "SensorPacket.fetchData.flag2"
 			if len(incoming) == 4:
 				print "SensorPacket.fetchData.flag3"
@@ -30,11 +32,10 @@ class sensorPacket():
 				self.throttle 	= int(incoming[1])
 				self.current 	= float(incoming[2])
 				self.voltage 	= float(incoming[3])
-			
-			self.tim = time
+				return SensorData('0', 'all', [self.rpm, self.throttle, self.current, self.voltage], self.tim)			
 
-			print "SensorPacket.fetchData.flag4"
-			return SensorData('0', 'all', [self.rpm, self.throttle, self.current, self.voltage], self.tim)
+			print "SensorPacket.fetchData.flag4: No data received."
+			return
 
 		except IndexError:
 			print "Wrong sensor data received, nothing sent"
