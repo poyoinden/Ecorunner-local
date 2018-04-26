@@ -103,7 +103,9 @@ while(True):
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 #		print "Flag 1."
 		# Collect rpm data to add them to database and send to ground base
-		sensordata.fetchData(ctime)
+		allsensordata = sensordata.fetchData(ctime)
+
+
 #		print "Flag 1.1"
 		rpmdata 	= sensordata.getRPMdata()
 #		print "Flag 1.2"
@@ -113,15 +115,19 @@ while(True):
 #		print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
 #		print "Flag 2."
-		makeMessage(rpmdata, 		sendQueue)		
-		addToDatabase(rpmdata)
-		makeMessage(throttledata, 	sendQueue)		
-		addToDatabase(throttledata)
-		makeMessage(currentdata, 	sendQueue)		
-		addToDatabase(currentdata)
-		makeMessage(voltagedata, 	sendQueue)		
-		addToDatabase(voltagedata)
 
+		# Send separate dataframes per data source, or combined.
+		if 1 == 2: makeMessage(allsensordata,		sendQueue)
+		else:
+			makeMessage(rpmdata, 		sendQueue)		
+			addToDatabase(rpmdata)
+			makeMessage(throttledata, 	sendQueue)		
+			addToDatabase(throttledata)
+			makeMessage(currentdata, 	sendQueue)		
+			addToDatabase(currentdata)
+			makeMessage(voltagedata, 	sendQueue)		
+			addToDatabase(voltagedata)
+	
 #		print "Flag 3."
 
 		# write the speed in km/h to the screen
@@ -154,7 +160,7 @@ while(True):
 			writeDBToFile()
 			lastLogTime = timeNow
 #		print "Flag 5."
-		time.sleep(0.2)
+		time.sleep(0.05)
 #		print "End of loop."
 	except ValueError:
 		print "Wrong value for the rpm data!"
