@@ -114,7 +114,7 @@ while(True):
 #		print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
 #		print "Flag 1.5"
-		gpsdata		= getGPSdata(tn, ctime)
+		gpsdata		= getGPSData(tn, ctime)
 		print gpsdata		
 
 #		print "Flag 2."
