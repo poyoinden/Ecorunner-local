@@ -8,7 +8,7 @@ from cleardb import cleardb
 from makeMessage import makeMessage
 from sensorPacket import sensorPacket
 from writeDBToFile import writeDBToFile
-from driverIntrface import driverIntrface
+from driverInterface import driverInterface
 from datetime import datetime
 from rpmToKMH import rpmToKMH
 
@@ -92,7 +92,7 @@ sensordata = sensorPacket()
 # Create serial connection for writing to the driver interface
 driverInterface = driverInterface()
 
-# Clear the database before running
+# Clear the database before  running
 cleardb()
 
 lastLogTime = datetime.now().strftime('%M')
@@ -113,6 +113,10 @@ while(True):
 		currentdata 	= sensordata.getCurrentdata()
 #		print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
+#		print "Flag 1.5"
+		gpsdata		= getGPSdata(tn, ctime)
+		print gpsdata		
+
 #		print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
