@@ -11,6 +11,7 @@ from writeDBToFile import writeDBToFile
 from driverInterface import driverInterface
 from datetime import datetime
 from rpmToKMH import rpmToKMH
+from boto.sqs.message import Message
 
 import sys
 import MySQLdb
@@ -18,19 +19,12 @@ import re
 import time
 import socket
 import boto.sqs
-from boto.sqs.message import Message
 import telnetlib
 import serial
 import math
 import pprint
 
 """------------------TO DO----------------------
-Refactor
-	rpmObject -> dataObject
-	throttleSensor filename -> DashboardController
-	delete voltagesensor
-	delete currentsensor
-	delete other scripts
 Implement
 	time.sleep -> 0
 	constant frequency runtime
@@ -115,12 +109,11 @@ while(True):
 		voltagedata	= sensordata.getVoltagedata()
 #		print "Flag 1.5"
 		gpsdata		= getGPSData(tn, ctime)
-		print gpsdata		
 
 #		print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
-		if 1 == 2: makeMessage(allsensordata,		sendQueue)
+		if 1 == 2: makeMessage(allsensordata,		sendQueue)	
 		else:
 			makeMessage(rpmdata, 		sendQueue)		
 			addToDatabase(rpmdata)
@@ -130,6 +123,8 @@ while(True):
 			addToDatabase(currentdata)
 			makeMessage(voltagedata, 	sendQueue)		
 			addToDatabase(voltagedata)
+			makeMessage(gpsdata, 		sendQueue)		
+			addToDatabase(gpsdata)
 	
 #		print "Flag 3."	
 		valRPM 		= rpmdata.getData()
@@ -143,6 +138,7 @@ while(True):
 		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57:
 			writeDBToFile()
 			lastLogTime = timeNow
+
 #		print "Flag 5."
 		time.sleep(0.05)
 #		print "End of loop."
