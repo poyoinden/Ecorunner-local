@@ -82,6 +82,7 @@ while True:
 		print "Connecting to the internet..."
 		time.sleep(5)
 		continue
+
 print "Going to sleep."
 #time.sleep(20)
 print "After sleep."

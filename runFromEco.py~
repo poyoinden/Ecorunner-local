@@ -89,7 +89,7 @@ print "After sleep."
 sensordata = sensorPacket()
 
 # Create serial connection for writing to the driver interface
-driverInterface = throttleSensor()
+driverInterface = driverInterface()
 
 # Clear the database before running
 cleardb()
