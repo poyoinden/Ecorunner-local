@@ -3,7 +3,7 @@ import time
 from SensorData import SensorData
 from datetime import datetime
 
-class throttleSensor():
+class driverInterface():
 	def __init__(self):	
 		self.ser = serial.Serial(baudrate = 38400, port = '/dev/ttyUSB0', timeout = 0)
 		self.throttle = -1

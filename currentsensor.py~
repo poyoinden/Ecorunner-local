@@ -14,16 +14,32 @@ class currentsensor():
 		try:
 			while(self.ser.in_waiting):
 				incoming = self.ser.readline().rstrip()
-				splitted = list(incoming)
-				res = splitted[10] + splitted[11] + splitted[12] + splitted[13]
-				# print "current: " + res
-				self.cur = float(res)				
+				res = incoming.split(",")
+				print res[0]
+				self.cur = float(res[0])				
 				self.tim = time
 		
-			return SensorData('9', 'Current', self.cur, self.tim)
+			return SensorData('3', 'Current', self.cur, self.tim)
 		
 		except IndexError:
 			print "Wrong current value, nothing sent"			
 		
+		except ValueError:
+			print "Wrong value string for the current"
+
+	def getCurrentData2(self, time):
+		try:
+			while(self.ser.in_waiting):
+				incoming = self.ser.readline().rstrip()
+				res = incoming.split(",")
+				print res[1]
+				self.cur = float(res[1])			
+				self.tim = time
+	
+			return SensorData('4', 'Current', self.cur, self.tim)
+	
+		except IndexError:
+			print "Wrong current value, nothing sent"			
+	
 		except ValueError:
 			print "Wrong value string for the current"
