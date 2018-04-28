@@ -6,13 +6,12 @@ from addToEcoDatabase import addToDatabase
 from getGPSData import getGPSData
 from cleardb import cleardb
 from makeMessage import makeMessage
-from getRPMdata import sensorPacket
+from sensorPacket import sensorPacket
 from writeDBToFile import writeDBToFile
-#from voltagesensor import voltagesensor
-#from currentsensor import currentsensor
 from throttleSensor import throttleSensor
 from datetime import datetime
 from rpmToKMH import rpmToKMH
+
 import sys
 import MySQLdb
 import re
