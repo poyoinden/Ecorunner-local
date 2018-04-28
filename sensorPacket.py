@@ -49,12 +49,12 @@ class sensorPacket():
 			print "Error: "+str(e)
 
 	def getRPMdata(self):
-		return SensorData('1', 'rpm', self.rpm, self.tim)
+		return SensorData('2', 'rpm', self.rpm, self.tim)
 	def getThrottledata(self):
-		return SensorData('2', 'throttle', self.throttle, self.tim)
+		return SensorData('1', 'throttle', self.throttle, self.tim)
 	def getCurrentdata(self):
 		return SensorData('3', 'current', self.current, self.tim)
 	def getVoltagedata(self):
-		return SensorData('4', 'votlage', self.voltage, self.tim)
+		return SensorData('5', 'votlage', self.voltage, self.tim)
 
 
