@@ -6,13 +6,12 @@ from addToEcoDatabase import addToDatabase
 from getGPSData import getGPSData
 from cleardb import cleardb
 from makeMessage import makeMessage
-from getRPMdata import sensorPacket
+from sensorPacket import sensorPacket
 from writeDBToFile import writeDBToFile
-#from voltagesensor import voltagesensor
-#from currentsensor import currentsensor
 from throttleSensor import throttleSensor
 from datetime import datetime
 from rpmToKMH import rpmToKMH
+
 import sys
 import MySQLdb
 import re
@@ -114,6 +113,10 @@ while(True):
 		currentdata 	= sensordata.getCurrentdata()
 #		print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
+#		print "Flag 1.5"
+		gpsdata 	= getGPSData.getGPSData(tn, ctime)
+		print gpsdata.lon		
+
 #		print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
