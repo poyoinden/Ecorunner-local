@@ -6,19 +6,20 @@ from addToEcoDatabase import addToDatabase
 from getGPSData import getGPSData
 from cleardb import cleardb
 from makeMessage import makeMessage
-from sensorPacket import sensorPacket
+from getRPMdata import sensorPacket
 from writeDBToFile import writeDBToFile
-from driverInterface import driverInterface
+#from voltagesensor import voltagesensor
+#from currentsensor import currentsensor
+from throttleSensor import throttleSensor
 from datetime import datetime
 from rpmToKMH import rpmToKMH
-from boto.sqs.message import Message
-
 import sys
 import MySQLdb
 import re
 import time
 import socket
 import boto.sqs
+from boto.sqs.message import Message
 import telnetlib
 import serial
 import math
@@ -82,15 +83,15 @@ while True:
 		print "Connecting to the internet..."
 		time.sleep(5)
 		continue
-
 print "Going to sleep."
 #time.sleep(20)
 print "After sleep."
+
 # Create sensor data object
 sensordata = sensorPacket()
 
 # Create serial connection for writing to the driver interface
-driverInterface = driverInterface()
+driverInterface = throttleSensor()
 
 # Clear the database before running
 cleardb()
@@ -102,7 +103,8 @@ while(True):
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 #		print "Flag 1."
 		# Collect rpm data to add them to database and send to ground base
-		allsensordata = sensordata.fetchData(ctime)		
+		allsensordata = sensordata.fetchData(ctime)
+
 
 #		print "Flag 1.1"
 		rpmdata 	= sensordata.getRPMdata()
@@ -112,8 +114,6 @@ while(True):
 		currentdata 	= sensordata.getCurrentdata()
 #		print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
-#		print "Flag 1.5"
-		GPSdata		= getGPSData.getGPSData(tn, ctime)
 #		print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
@@ -128,12 +128,31 @@ while(True):
 			makeMessage(voltagedata, 	sendQueue)		
 			addToDatabase(voltagedata)
 	
-#		print "Flag 3."	
+#		print "Flag 3."
+
+		# write the speed in km/h to the screen
+		#driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
+		# Test cases:
+		# - speed + throttle: 	"S"+speed + "," + throttle
+#		incomingPacket = rpmObject.data.rsplit(',')		
 		valRPM 		= rpmdata.getData()
 		valThrottle 	= throttledata.getData()
 		driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
 #		print "Flag 4."
+		# Collect throttle data to add them to database and send to ground base
+		#throttleObject = driverInterface.getThrottledata(ctime)
+		#makeMessage(throttleObject, sendQueue)	
+		#addToDatabase(throttleObject)
 
+		# Collect current data 1 to add them to database and send to ground base
+		#currentObject = currentsensor.getCurrentData(ctime)
+		#makeMessage(currentObject, sendQueue)
+		#addToDatabase(currentObject)
+
+		# Collect current data 1 to add them to database and send to ground base
+		#currentObject2 = currentsensor.getCurrentData2(ctime)
+		#makeMessage(currentObject2, sendQueue)
+		#addToDatabase(currentObject2)
 
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
@@ -143,7 +162,6 @@ while(True):
 #		print "Flag 5."
 		time.sleep(0.05)
 #		print "End of loop."
-		print GPSdata
 	except ValueError:
 		print "Wrong value for the rpm data!"
 

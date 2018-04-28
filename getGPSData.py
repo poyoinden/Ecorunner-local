@@ -19,8 +19,7 @@ def getGPSData(tn, time):
 				break
 		
 		except AttributeError:
-			print "h"
-			continue
+			pass
 	
 		except:	
 			print "unknown exception found in getGPSData.py"	
