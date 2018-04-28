@@ -8,7 +8,7 @@ from cleardb import cleardb
 from makeMessage import makeMessage
 from sensorPacket import sensorPacket
 from writeDBToFile import writeDBToFile
-from throttleSensor import throttleSensor
+from driverIntrface import driverIntrface
 from datetime import datetime
 from rpmToKMH import rpmToKMH
 
@@ -90,7 +90,7 @@ print "After sleep."
 sensordata = sensorPacket()
 
 # Create serial connection for writing to the driver interface
-driverInterface = throttleSensor()
+driverInterface = driverInterface()
 
 # Clear the database before running
 cleardb()
@@ -127,31 +127,12 @@ while(True):
 			makeMessage(voltagedata, 	sendQueue)		
 			addToDatabase(voltagedata)
 	
-#		print "Flag 3."
-
-		# write the speed in km/h to the screen
-		#driverInterface.getSerial().write(str(rpmToKMH(rpmObject.getData())))
-		# Test cases:
-		# - speed + throttle: 	"S"+speed + "," + throttle
-#		incomingPacket = rpmObject.data.rsplit(',')		
+#		print "Flag 3."	
 		valRPM 		= rpmdata.getData()
 		valThrottle 	= throttledata.getData()
 		driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
 #		print "Flag 4."
-		# Collect throttle data to add them to database and send to ground base
-		#throttleObject = driverInterface.getThrottledata(ctime)
-		#makeMessage(throttleObject, sendQueue)	
-		#addToDatabase(throttleObject)
 
-		# Collect current data 1 to add them to database and send to ground base
-		#currentObject = currentsensor.getCurrentData(ctime)
-		#makeMessage(currentObject, sendQueue)
-		#addToDatabase(currentObject)
-
-		# Collect current data 1 to add them to database and send to ground base
-		#currentObject2 = currentsensor.getCurrentData2(ctime)
-		#makeMessage(currentObject2, sendQueue)
-		#addToDatabase(currentObject2)
 
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
