@@ -38,6 +38,8 @@ Implement
 
 WHEELRADIUS = 0.235
 CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
+debugging = True
+
 
 while True:
 	try:
@@ -94,23 +96,26 @@ print "Start main loop."
 while(True):
 	try:	
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-#		print "Flag 1."
+		if debugging: print "Flag 1."
+	
+
 		# Collect rpm data to add them to database and send to ground base
-		allsensordata = sensordata.fetchData(ctime)
+		if 1 == 2:
+			allsensordata = sensordata.fetchData(ctime)
+		else:
+			sensordata.fetchData(ctime)
+			if debugging: print "Flag 1.1"
+			rpmdata 	= sensordata.getRPMdata()
+			if debugging: print "Flag 1.2"
+			throttledata	= sensordata.getThrottledata()
+			if debugging: print "Flag 1.3"
+			currentdata 	= sensordata.getCurrentdata()
+			if debugging: print "Flag 1.4"
+			voltagedata	= sensordata.getVoltagedata()
+			if debugging: print "Flag 1.5"
+			gpsdata		= getGPSData(tn, ctime)
 
-
-#		print "Flag 1.1"
-		rpmdata 	= sensordata.getRPMdata()
-#		print "Flag 1.2"
-		throttledata	= sensordata.getThrottledata()
-#		print "Flag 1.3"
-		currentdata 	= sensordata.getCurrentdata()
-#		print "Flag 1.4"
-		voltagedata	= sensordata.getVoltagedata()
-#		print "Flag 1.5"
-		gpsdata		= getGPSData(tn, ctime)
-
-#		print "Flag 2."
+		if debugging: print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
 		if 1 == 2: makeMessage(allsensordata,		sendQueue)	
@@ -126,11 +131,11 @@ while(True):
 			makeMessage(gpsdata, 		sendQueue)		
 			addToDatabase(gpsdata)
 	
-#		print "Flag 3."	
+		if debugging: print "Flag 3."	
 		valRPM 		= rpmdata.getData()
 		valThrottle 	= throttledata.getData()
 		driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
-#		print "Flag 4."
+		if debugging: print "Flag 4."
 
 
 		# Check if 3 minutes have passed to write the log
@@ -139,9 +144,9 @@ while(True):
 			writeDBToFile()
 			lastLogTime = timeNow
 
-#		print "Flag 5."
+		if debugging: print "Flag 5."
 		time.sleep(0.05)
-#		print "End of loop."
+		if debugging: print "End of loop."
 	except ValueError:
 		print "Wrong value for the rpm data!"
 
