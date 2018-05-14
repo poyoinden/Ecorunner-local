@@ -31,15 +31,40 @@ Implement
 	Project Speedup
 	automatic port naming Dashboard
 	offline version that auto-runs
-	get and send GPS data
-	automatic write-to-textfile
+	x get and send GPS data
+	x automatic write-to-textfile
 	multiple points per packet (a0,b0,c0;a1,b1,c1)
+	x print loop times
+	x log loop times
+	x fixate frequency of GPS data and solve timestamp problem
 ---------------------------------------------"""
 
 WHEELRADIUS = 0.235
 CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
-debugging = True
+debugging = False
+localLogging = True
+telemetry = True
+suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
 
+from contextlib import contextmanager
+import sys, os
+
+@contextmanager
+def suppress_stdout():
+	with open(os.devnull, "w") as devnull:
+		old_stdout = sys.stdout
+		sys.stdout = devnull
+		try:
+			yield
+		finally:
+			sys.stdout = old_stdout
+
+epoch = 0 
+def print_epoch_time_millis(old_t, epoch):
+	new_t = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+	dt = (int(new_t) - int(old_t)).total_seconds() * 1000.0
+	print "Epoch %d: \t %s seconds" % (dt, epoch)
+	return
 
 while True:
 	try:
@@ -92,44 +117,50 @@ driverInterface = driverInterface()
 cleardb()
 
 lastLogTime = datetime.now().strftime('%M')
+gps_time = time.time()
+
 print "Start main loop."
 while(True):
-	try:	
+	start_time = time.time()
+	epoch += 1
+	try:
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
 		if debugging: print "Flag 1."
 	
-
 		# Collect rpm data to add them to database and send to ground base
-		if 1 == 2:
-			allsensordata = sensordata.fetchData(ctime)
+		allsensordata = sensordata.fetchData(ctime)
+		sensordata.fetchData(ctime)
+
+		if debugging: print "Flag 1.1"
+		rpmdata 	= sensordata.getRPMdata()
+		if debugging: print "Flag 1.2"
+		throttledata	= sensordata.getThrottledata()
+		if debugging: print "Flag 1.3"
+		currentdata 	= sensordata.getCurrentdata()
+		if debugging: print "Flag 1.4"
+		voltagedata	= sensordata.getVoltagedata()
+		if debugging: print "Flag 1.5"
+		
+		if gps_time - start_time > 1.7 or  epoch < 5:
+			gpsdata	= getGPSData(tn, ctime)
+			gps_time = start_time
 		else:
-			sensordata.fetchData(ctime)
-			if debugging: print "Flag 1.1"
-			rpmdata 	= sensordata.getRPMdata()
-			if debugging: print "Flag 1.2"
-			throttledata	= sensordata.getThrottledata()
-			if debugging: print "Flag 1.3"
-			currentdata 	= sensordata.getCurrentdata()
-			if debugging: print "Flag 1.4"
-			voltagedata	= sensordata.getVoltagedata()
-			if debugging: print "Flag 1.5"
-			gpsdata		= getGPSData(tn, ctime)
+			gpsdata.updateTimestamp(ctime)
 
 		if debugging: print "Flag 2."
 
 		# Send separate dataframes per data source, or combined.
-		if 1 == 2: makeMessage(allsensordata,		sendQueue)	
-		else:
-			makeMessage(rpmdata, 		sendQueue)		
-			addToDatabase(rpmdata)
-			makeMessage(throttledata, 	sendQueue)		
-			addToDatabase(throttledata)
-			makeMessage(currentdata, 	sendQueue)		
-			addToDatabase(currentdata)
-			makeMessage(voltagedata, 	sendQueue)		
-			addToDatabase(voltagedata)
-			makeMessage(gpsdata, 		sendQueue)		
-			addToDatabase(gpsdata)
+		#with suppress_stdout():
+		if telemetry: makeMessage(rpmdata, 		sendQueue)		
+		if localLogging: addToDatabase(rpmdata)
+		if telemetry: makeMessage(throttledata, 	sendQueue)		
+		if localLogging: addToDatabase(throttledata)
+		if telemetry: makeMessage(currentdata, 	sendQueue)		
+		if localLogging: addToDatabase(currentdata)
+		if telemetry: makeMessage(voltagedata, 	sendQueue)		
+		if localLogging: addToDatabase(voltagedata)
+		if telemetry: makeMessage(gpsdata, 		sendQueue)		
+		if localLogging: addToDatabase(gpsdata)
 	
 		if debugging: print "Flag 3."	
 		valRPM 		= rpmdata.getData()
@@ -137,21 +168,24 @@ while(True):
 		driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
 		if debugging: print "Flag 4."
 
-
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
 		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57:
 			writeDBToFile()
 			lastLogTime = timeNow
 
-		if debugging: print "Flag 5."
-		time.sleep(0.05)
+		# print_epoch_time_millis(ctime, epoch)
+		print "--- %s seconds ---" % (time.time() - start_time)
+		if debugging:  print "Flag 5."
+		time.sleep(0.03)
 		if debugging: print "End of loop."
+		
+
 	except ValueError:
 		print "Wrong value for the rpm data!"
 
-	except AttributeError:
-		print "-----------------------------------------------"
+#	except AttributeError:
+#		print "-----------------------------------------------"
 
 	except KeyboardInterrupt:
 		writeDBToFile()

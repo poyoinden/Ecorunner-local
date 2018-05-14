@@ -1,0 +1,10 @@
+1, throttle, -1, -1
+2, throttle, -1, -1
+1, rpm, -1, -1
+2, rpm, -1, -1
+1, current, -1, -1
+2, current, -1, -1
+1, votlage, -1, -1
+2, votlage, -1, -1
+1, , , None, 12:23:22.397
+2, , , None, 12:23:22.690

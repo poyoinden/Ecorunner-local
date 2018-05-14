@@ -5,7 +5,9 @@ class GPS(object):
 		self.lattitude = lattitude
 		self.speed = speed
 		self.timestamp = timestamp
-         
+	def updateTimestamp(self, new_timestamp):
+		self.timestamp = new_timestamp        
+
 	def getLongtitude(self):
 		return self.longtitude
 

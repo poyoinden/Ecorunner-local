@@ -1,0 +1,130 @@
+1, throttle, -1, -1
+2, throttle, -1, -1
+3, throttle, -1, -1
+4, throttle, -1, -1
+5, throttle, -1, -1
+6, throttle, -1, -1
+7, throttle, -1, -1
+8, throttle, -1, -1
+9, throttle, -1, -1
+10, throttle, -1, -1
+11, throttle, -1, -1
+12, throttle, -1, -1
+13, throttle, -1, -1
+14, throttle, -1, -1
+15, throttle, -1, -1
+16, throttle, -1, -1
+17, throttle, -1, -1
+18, throttle, -1, -1
+19, throttle, -1, -1
+20, throttle, -1, -1
+21, throttle, -1, -1
+22, throttle, -1, -1
+23, throttle, -1, -1
+24, throttle, -1, -1
+25, throttle, -1, -1
+26, throttle, -1, -1
+1, rpm, -1, -1
+2, rpm, -1, -1
+3, rpm, -1, -1
+4, rpm, -1, -1
+5, rpm, -1, -1
+6, rpm, -1, -1
+7, rpm, -1, -1
+8, rpm, -1, -1
+9, rpm, -1, -1
+10, rpm, -1, -1
+11, rpm, -1, -1
+12, rpm, -1, -1
+13, rpm, -1, -1
+14, rpm, -1, -1
+15, rpm, -1, -1
+16, rpm, -1, -1
+17, rpm, -1, -1
+18, rpm, -1, -1
+19, rpm, -1, -1
+20, rpm, -1, -1
+21, rpm, -1, -1
+22, rpm, -1, -1
+23, rpm, -1, -1
+24, rpm, -1, -1
+25, rpm, -1, -1
+26, rpm, -1, -1
+1, current, -1, -1
+2, current, -1, -1
+3, current, -1, -1
+4, current, -1, -1
+5, current, -1, -1
+6, current, -1, -1
+7, current, -1, -1
+8, current, -1, -1
+9, current, -1, -1
+10, current, -1, -1
+11, current, -1, -1
+12, current, -1, -1
+13, current, -1, -1
+14, current, -1, -1
+15, current, -1, -1
+16, current, -1, -1
+17, current, -1, -1
+18, current, -1, -1
+19, current, -1, -1
+20, current, -1, -1
+21, current, -1, -1
+22, current, -1, -1
+23, current, -1, -1
+24, current, -1, -1
+25, current, -1, -1
+26, current, -1, -1
+1, votlage, -1, -1
+2, votlage, -1, -1
+3, votlage, -1, -1
+4, votlage, -1, -1
+5, votlage, -1, -1
+6, votlage, -1, -1
+7, votlage, -1, -1
+8, votlage, -1, -1
+9, votlage, -1, -1
+10, votlage, -1, -1
+11, votlage, -1, -1
+12, votlage, -1, -1
+13, votlage, -1, -1
+14, votlage, -1, -1
+15, votlage, -1, -1
+16, votlage, -1, -1
+17, votlage, -1, -1
+18, votlage, -1, -1
+19, votlage, -1, -1
+20, votlage, -1, -1
+21, votlage, -1, -1
+22, votlage, -1, -1
+23, votlage, -1, -1
+24, votlage, -1, -1
+25, votlage, -1, -1
+26, votlage, -1, -1
+1, , , None, 16:22:00.124
+2, , , None, 16:22:00.427
+3, , , None, 16:22:00.721
+4, , , None, 16:22:01.037
+5, , , None, 16:22:01.388
+6, , , None, 16:22:01.740
+7, , , None, 16:22:02.590
+8, , , None, 16:22:04.168
+9, , , None, 16:22:04.617
+10, , , None, 16:22:05.623
+11, , , None, 16:22:06.774
+12, , , None, 16:22:07.527
+13, , , None, 16:22:08.554
+14, , , None, 16:22:09.586
+15, , , None, 16:22:10.582
+16, , , None, 16:22:11.621
+17, , , None, 16:22:12.639
+18, , , None, 16:22:13.572
+19, , , None, 16:22:14.557
+20, , , None, 16:22:15.550
+21, , , None, 16:22:16.830
+22, , , None, 16:22:17.513
+23, , , None, 16:22:18.551
+24, , , None, 16:22:19.571
+25, , , None, 16:22:20.579
+26, , , None, 16:22:21.626
