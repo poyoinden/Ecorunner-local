@@ -3,6 +3,7 @@ import time
 from SensorData import SensorData
 from datetime import datetime
 import sys 
+import random
 
 debugging = False
 
@@ -55,6 +56,13 @@ class sensorPacket():
 #			e = sys.exc_info()[0]
 #			print "Something went wrong."
 #			print "Error: "+str(e)
+
+	def getDummy(self, ctime):
+		self.rpm 	= int(random.randint(0,450))#int(incoming[0])
+		self.throttle 	= int(random.randint(0,100))#int(incoming[1])
+		self.current 	= float(random.uniform(0,1)*20)#float(incoming[2])
+		self.voltage 	= float(random.uniform(0,1)*30)#float(incoming[3])
+		return
 
 	def getRPMdata(self):
 		return SensorData('2', 'rpm', self.rpm, self.tim)

@@ -45,7 +45,6 @@ debugging = False
 localLogging = True
 telemetry = True
 suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
-DRIVERINTERFACE = False
 
 from contextlib import contextmanager
 import sys, os
@@ -70,7 +69,7 @@ def print_epoch_time_millis(old_t, epoch):
 while True:
 	try:
 		# Open connection to the amazon sqs
-		conn = boto.sqs.connect_to_region("eu-west-2", aws_access_key_id = "AKIAIL7GJX2LR33WW3AA", aws_secret_access_key = "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")
+		conn = boto.sqs.connect_to_region("eu-west-2", aws_access_key_id = "AKIA", aws_secret_access_key = "Cj7R0XqNtgjD1O2PD96kK9UZJ1k8/+HHZbUDm/bx")
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
@@ -112,7 +111,7 @@ print "After sleep."
 sensordata = sensorPacket()
 
 # Create serial connection for writing to the driver interface
-if DRIVERINTERFACE: driverInterface = driverInterface()
+#driverInterface = driverInterface()
 
 # Clear the database before  running
 cleardb()
@@ -142,11 +141,9 @@ while(True):
 		voltagedata	= sensordata.getVoltagedata()
 		if debugging: print "Flag 1.5"
 		
-#		print str(rpmdata.getData()) + str(throttledata.getData())
-
 		print start_time - gps_time
 
-		if start_time - gps_time > 1.0 or  epoch < 5:
+		if start_time - gps_time > 1.7 or  epoch < 5:
 			gpsdata	= getGPSData(tn, ctime)
 			gps_time = start_time
 		else:
@@ -156,7 +153,6 @@ while(True):
 
 		# Send separate dataframes per data source, or combined.
 		#with suppress_stdout():
-		print "--- %s seconds ---" % (time.time() - start_time)
 		if telemetry: makeMessage(rpmdata, 		sendQueue)		
 		if localLogging: addToDatabase(rpmdata)
 		if telemetry: makeMessage(throttledata, 	sendQueue)		
@@ -167,13 +163,11 @@ while(True):
 		if localLogging: addToDatabase(voltagedata)
 		if telemetry: makeMessage(gpsdata, 		sendQueue)		
 		if localLogging: addToDatabase(gpsdata)
-		print "--- %s seconds ---" % (time.time() - start_time)
 	
 		if debugging: print "Flag 3."	
 		valRPM 		= rpmdata.getData()
 		valThrottle 	= throttledata.getData()
-		if DRIVERINTERFACE:
-			driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
+#		driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
 		if debugging: print "Flag 4."
 
 		# Check if 3 minutes have passed to write the log

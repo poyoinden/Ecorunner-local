@@ -44,8 +44,8 @@ CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
 debugging = False
 localLogging = True
 telemetry = True
-suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
 DRIVERINTERFACE = False
+suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
 
 from contextlib import contextmanager
 import sys, os
@@ -129,7 +129,7 @@ while(True):
 		if debugging: print "Flag 1."
 	
 		# Collect rpm data to add them to database and send to ground base
-		allsensordata = sensordata.fetchData(ctime)
+#		sensordata.getDummy(ctime)
 		sensordata.fetchData(ctime)
 
 		if debugging: print "Flag 1.1"
@@ -142,11 +142,10 @@ while(True):
 		voltagedata	= sensordata.getVoltagedata()
 		if debugging: print "Flag 1.5"
 		
-#		print str(rpmdata.getData()) + str(throttledata.getData())
 
 		print start_time - gps_time
 
-		if start_time - gps_time > 1.0 or  epoch < 5:
+		if start_time - gps_time > 1.2 or  epoch < 5:
 			gpsdata	= getGPSData(tn, ctime)
 			gps_time = start_time
 		else:
@@ -156,7 +155,6 @@ while(True):
 
 		# Send separate dataframes per data source, or combined.
 		#with suppress_stdout():
-		print "--- %s seconds ---" % (time.time() - start_time)
 		if telemetry: makeMessage(rpmdata, 		sendQueue)		
 		if localLogging: addToDatabase(rpmdata)
 		if telemetry: makeMessage(throttledata, 	sendQueue)		
@@ -167,7 +165,8 @@ while(True):
 		if localLogging: addToDatabase(voltagedata)
 		if telemetry: makeMessage(gpsdata, 		sendQueue)		
 		if localLogging: addToDatabase(gpsdata)
-		print "--- %s seconds ---" % (time.time() - start_time)
+
+		print str(rpmdata.getData()) + " " + str(throttledata.getData()) + " " + str(gpsdata.getLongtitude()) + " " + str(gpsdata.getLattitude())
 	
 		if debugging: print "Flag 3."	
 		valRPM 		= rpmdata.getData()
