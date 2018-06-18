@@ -42,6 +42,7 @@ class sensorPacket():
 					self.throttle 	= int(incoming[1])
 					self.current 	= float(incoming[2])
 					self.voltage 	= float(incoming[3])
+					print incoming
 					return SensorData('0', 'all', [self.rpm, self.throttle, self.current, self.voltage], self.tim)			
 
 			return

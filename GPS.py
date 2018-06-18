@@ -1,6 +1,6 @@
 """ Class for the gps object """
 class GPS(object):
-	def __init__(self, longtitude, lattitude, speed, timestamp):
+	def __init__(self, longtitude = "00201.112127", lattitude = "4903.245270", speed=0, timestamp=-1):
 		self.longtitude = longtitude
 		self.lattitude = lattitude
 		self.speed = speed

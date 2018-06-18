@@ -23,6 +23,7 @@ import telnetlib
 import serial
 import math
 import pprint
+import key
 
 """------------------TO DO----------------------
 Implement
@@ -42,9 +43,11 @@ Implement
 WHEELRADIUS = 0.235
 CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
 debugging = False
+extratime = False
 localLogging = True
-telemetry = True
-DRIVERINTERFACE = False
+telemetry = False
+DRIVERINTERFACE = True
+includeGPS = True
 suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
 
 from contextlib import contextmanager
@@ -70,13 +73,15 @@ def print_epoch_time_millis(old_t, epoch):
 while True:
 	try:
 		# Open connection to the amazon sqs
-		conn = boto.sqs.connect_to_region("eu-west-2", aws_access_key_id = "AKIAIL7GJX2LR33WW3AA", aws_secret_access_key = "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")
+#		print key.id()
+#		print key.secret()
+		#conn = boto.sqs.connect_to_region("eu-west-2", aws_access_key_id = key.getid(), aws_secret_access_key = key.getsecret())
 
 		# Open connection to the gps server
 		tn = telnetlib.Telnet("192.168.50.1", 60660)
 
 		# Open connection to the sqs
-		while True:
+		while False:
 			sendQueue = conn.get_queue('Eco2GB')
 
 			if sendQueue is None:
@@ -132,48 +137,75 @@ while(True):
 #		sensordata.getDummy(ctime)
 		sensordata.fetchData(ctime)
 
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
+
 		if debugging: print "Flag 1.1"
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		rpmdata 	= sensordata.getRPMdata()
 		if debugging: print "Flag 1.2"
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		throttledata	= sensordata.getThrottledata()
 		if debugging: print "Flag 1.3"
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		currentdata 	= sensordata.getCurrentdata()
 		if debugging: print "Flag 1.4"
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		voltagedata	= sensordata.getVoltagedata()
 		if debugging: print "Flag 1.5"
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		
-
-		print start_time - gps_time
-
-		if start_time - gps_time > 1.2 or  epoch < 5:
-			gpsdata	= getGPSData(tn, ctime)
-			gps_time = start_time
-		else:
-			gpsdata.updateTimestamp(ctime)
+		#oprint start_time - gps_time
+		if includeGPS:
+			if start_time - gps_time > 0.7 or  epoch < 5:
+				gpsdata	= getGPSData(tn, ctime)
+				gps_time = start_time
+			else:
+				gpsdata.updateTimestamp(ctime)
 
 		if debugging: print "Flag 2."
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
+
 
 		# Send separate dataframes per data source, or combined.
 		#with suppress_stdout():
 		if telemetry: makeMessage(rpmdata, 		sendQueue)		
 		if localLogging: addToDatabase(rpmdata)
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		if telemetry: makeMessage(throttledata, 	sendQueue)		
 		if localLogging: addToDatabase(throttledata)
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		if telemetry: makeMessage(currentdata, 	sendQueue)		
 		if localLogging: addToDatabase(currentdata)
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		if telemetry: makeMessage(voltagedata, 	sendQueue)		
 		if localLogging: addToDatabase(voltagedata)
-		if telemetry: makeMessage(gpsdata, 		sendQueue)		
-		if localLogging: addToDatabase(gpsdata)
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
+		if (telemetry and includeGPS): makeMessage(gpsdata, 		sendQueue)		
+		if (localLogging and includeGPS): addToDatabase(gpsdata)
 
-		print str(rpmdata.getData()) + " " + str(throttledata.getData()) + " " + str(gpsdata.getLongtitude()) + " " + str(gpsdata.getLattitude())
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
+
+		print str(rpmToKMH(rpmdata.getData(), 0.235)) + " " + str(throttledata.getData()) + " " + str(currentdata.getData()) + " " + str(voltagedata.getData())
+		if includeGPS: print str(gpsdata.getSpeed()) + "\t" + str(gpsdata.getLongtitude()) + " " + str(gpsdata.getLattitude())
 	
 		if debugging: print "Flag 3."	
 		valRPM 		= rpmdata.getData()
 		valThrottle 	= throttledata.getData()
+		valCurrent 	= currentdata.getData()
+		valVoltage	= int(voltagedata.getData())
+		valSpeed = rpmToKMH(valRPM, 0.235)
+
+	#	try:
+#			valSpeedFromGPS = int(gpsdata.getSpeed())
+#		except:
+		if (valSpeed == 0):
+			valSpeed = valSpeed + 1 
+		if (valVoltage == 0):
+			valVoltage = valVoltage + 1
 		if DRIVERINTERFACE:
-			driverInterface.getSerial().write("S"+str(valRPM)+","+str(valThrottle))
+			driverInterface.getSerial().write("S"+ str(valSpeed) +","+str(int(valVoltage)))
 		if debugging: print "Flag 4."
+		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
@@ -184,7 +216,7 @@ while(True):
 		# print_epoch_time_millis(ctime, epoch)
 		print "--- %s seconds ---" % (time.time() - start_time)
 		if debugging:  print "Flag 5."
-		time.sleep(0.03)
+		time.sleep(0.01)
 		if debugging: print "End of loop."
 		
 
@@ -196,5 +228,6 @@ while(True):
 
 	except KeyboardInterrupt:
 		writeDBToFile()
+		print str(epochs) + "epochs finished."
 		sys.exit()
 
