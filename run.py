@@ -44,7 +44,7 @@ WHEELRADIUS = 0.235
 CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
 debugging = False
 extratime = False
-localLogging = True
+localLogging = False
 telemetry = False
 DRIVERINTERFACE = True
 includeGPS = True
@@ -156,7 +156,7 @@ while(True):
 		
 		#oprint start_time - gps_time
 		if includeGPS:
-			if start_time - gps_time > 0.7 or  epoch < 5:
+			if start_time - gps_time > 1.5 or  epoch < 5:
 				gpsdata	= getGPSData(tn, ctime)
 				gps_time = start_time
 			else:
@@ -228,6 +228,6 @@ while(True):
 
 	except KeyboardInterrupt:
 		writeDBToFile()
-		print str(epochs) + "epochs finished."
+		print str(epoch) + "epochs finished."
 		sys.exit()
 

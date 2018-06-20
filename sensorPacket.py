@@ -38,11 +38,16 @@ class sensorPacket():
 				if debugging: print "SensorPacket.fetchData.flag2"
 				if len(incoming) == 4:
 					#print "SensorPacket.fetchData.flag3"
-					self.rpm 	= int(incoming[0])
-					self.throttle 	= int(incoming[1])
-					self.current 	= float(incoming[2])
-					self.voltage 	= float(incoming[3])
 					print incoming
+					print "flag1"
+					self.rpm 	= int(incoming[0])
+					print "flag2"
+					print incoming[1]
+					self.throttle 	= float(incoming[1])
+					print "flag3"
+					self.current 	= float(incoming[2])
+					print "flag4"
+					self.voltage 	= float(incoming[3])
 					return SensorData('0', 'all', [self.rpm, self.throttle, self.current, self.voltage], self.tim)			
 
 			return
