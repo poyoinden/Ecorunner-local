@@ -4,6 +4,7 @@ import boto.sqs
 from boto.sqs.message import Message
 import MySQLdb
 
+debugging = False
 
 def addToDatabase(message):
 	db = MySQLdb.connect("localhost","root","reverse","ecoData" )
@@ -14,7 +15,7 @@ def addToDatabase(message):
 		try: 	
 			cursor.execute("""INSERT INTO Throttle (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Throttle data added to database"
+			if debugging: print "Throttle data added to database"
 		except:
 			print "Something went wrong while adding throttle to the database"
 
@@ -24,7 +25,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO Rpm1 (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Rpm data added to database"
+			if debugging: print "Rpm data added to database"
 		except:
 			print "Something went wrong while adding rpm 1 to the database"
 
@@ -33,7 +34,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO Current1 (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Current 1 data added to database"
+			if debugging: print "Current 1 data added to database"
 		except:
 			print "Something went wrong while adding current 1 to the database"
 
@@ -42,7 +43,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO Current2 (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Current 2 data added to database"
+			if debugging: print "Current 2 data added to database"
 		except:
 			print "Something went wrong while adding current 2 to the database"
 
@@ -52,7 +53,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO Voltage1 (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Voltage 1 data added to database"
+			if debugging: print "Voltage 1 data added to database"
 		except:
 			print "Something went wrong while adding voltage 1 to the database"
 
@@ -61,7 +62,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO Voltage2 (TYPE, DATA, TIMESTAMP) VALUES (%s, %s, %s)""", (message.getMsgType(), message.getData(), message.getTimestamp()))
 			db.commit()
-			print "Voltage 2 data added to database"
+			if debugging: print "Voltage 2 data added to database"
 		except:
 			print "Something went wrong while adding voltage 2 to the database"
 
@@ -71,7 +72,7 @@ def addToDatabase(message):
 		try:
 			cursor.execute("""INSERT INTO GPS (LONGTITUDE, LATTITUDE, SPEED, TIMESTAMP) VALUES (%s, %s, %s, %s)""", (message.getLongtitude(), message.getLattitude(), message.getSpeed(), message.getTimestamp()))
 			db.commit()
-			print "GPS data added to database"
+			if debugging: print "GPS data added to database"
 
 		except:
 			print "Something went wrong while adding GPS to the database"

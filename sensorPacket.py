@@ -15,7 +15,7 @@ class sensorPacket():
 		
 		self.rpm = -1
 		self.throttle = -1
-		self.current = -1
+		self.current = '-1'
 		self.voltage = -1
 
 		self.tim = -1
@@ -30,7 +30,7 @@ class sensorPacket():
 					print "Incoming is Null"
 				self.ser.reset_input_buffer()
 
-				print incoming
+				if debugging: print incoming
 				#print "Length:" + str(len(incoming))
 
 				self.tim = time	
@@ -38,15 +38,15 @@ class sensorPacket():
 				if debugging: print "SensorPacket.fetchData.flag2"
 				if len(incoming) == 4:
 					#print "SensorPacket.fetchData.flag3"
-					print incoming
-					print "flag1"
+#					print incoming
+					if debugging: print "flag1"
 					self.rpm 	= int(incoming[0])
-					print "flag2"
-					print incoming[1]
-					self.throttle 	= float(incoming[1])
-					print "flag3"
-					self.current 	= float(incoming[2])
-					print "flag4"
+					if debugging: print "flag2"
+					if debugging: print incoming[1]
+					self.throttle 	= int(incoming[1])
+					if debugging: print "flag3"
+					self.current 	= (incoming[2])
+					if debugging: print "flag4"
 					self.voltage 	= float(incoming[3])
 					return SensorData('0', 'all', [self.rpm, self.throttle, self.current, self.voltage], self.tim)			
 
