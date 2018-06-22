@@ -69,7 +69,7 @@ class sensorPacket():
 	def getThrottledata(self):
 		return SensorData('1', 'throttle', self.throttle, self.tim)
 	def getCurrentdata(self):
-		return SensorData('3', 'current', self.current, self.tim)
+		return self.current, self.tim
 	def getVoltagedata(self):
 		return SensorData('5', 'votlage', self.voltage, self.tim)
 

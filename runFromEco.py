@@ -137,7 +137,11 @@ while(True):
 		if debugging: print "Flag 1.2"
 		throttledata	= sensordata.getThrottledata()
 		if debugging: print "Flag 1.3"
-		currentdata 	= sensordata.getCurrentdata()
+		currentdata, timecurrent 	= sensordata.getCurrentdata()
+		currentdatasplit = currentdata.rsplit("/")
+		currentdata1 = SensorData('3', 'current', currentdatasplit[0], timecurrent)
+		currentdata2 = SensorData('4', 'current', currentdatasplit[1], timecurrent)
+
 		if debugging: print "Flag 1.4"
 		voltagedata	= sensordata.getVoltagedata()
 		if debugging: print "Flag 1.5"
@@ -161,8 +165,10 @@ while(True):
 		if localLogging: addToDatabase(rpmdata)
 		if telemetry: makeMessage(throttledata, 	sendQueue)		
 		if localLogging: addToDatabase(throttledata)
-		if telemetry: makeMessage(currentdata, 	sendQueue)		
-		if localLogging: addToDatabase(currentdata)
+		if telemetry: makeMessage(currentdata1, 	sendQueue)
+		if localLogging: addToDatabase(currentdata1)
+		if telemetry: makeMessage(currentdata2, 	sendQueue)
+		if localLogging: addToDatabase(currentdata2)
 		if telemetry: makeMessage(voltagedata, 	sendQueue)		
 		if localLogging: addToDatabase(voltagedata)
 		if telemetry: makeMessage(gpsdata, 		sendQueue)		
