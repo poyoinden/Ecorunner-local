@@ -1,3 +1,4 @@
+
 from __future__ import division
 from SensorData import SensorData
 from parseMessage import parseMessage
@@ -27,11 +28,11 @@ import key
 
 """------------------TO DO----------------------
 Implement
-	time.sleep -> 0
+	x time.sleep -> 0
 	constant frequency runtime
-	Project Speedup
-	automatic port naming Dashboard
-	offline version that auto-runs
+	x Project Speedup
+	x automatic port naming Dashboard
+	x offline version that auto-runs
 	x get and send GPS data
 	x automatic write-to-textfile
 	multiple points per packet (a0,b0,c0;a1,b1,c1)
@@ -44,11 +45,18 @@ WHEELRADIUS = 0.235
 CIRCUMFERENCE = WHEELRADIUS * 2 * math.pi
 debugging = False
 extratime = False
-localLogging = True
+localLogging = False # 974 -> 34 Hz
 telemetry = False
 DRIVERINTERFACE = True
 includeGPS = True
 suppressStdout = 3 # 1 (no suppression), 2, 3 (only data) and 4 (strictest suppression) 
+SET_EPOCHTIME = None # seconds per loop
+SET_PRINTTIME = 0.3
+SET_GPSTIME = 0.9
+SHOWDEC_SPEED = 10
+SHOWDEC_VOLT = 10
+SLEEP = 0.0
+SENSOR = False
 
 from contextlib import contextmanager
 import sys, os
@@ -115,7 +123,7 @@ print "Going to sleep."
 print "After sleep."
 
 # Create sensor data object
-sensordata = sensorPacket()
+if SENSOR: sensordata = sensorPacket()
 
 # Create serial connection for writing to the driver interface
 if DRIVERINTERFACE: driverInterface = driverInterface()
@@ -127,10 +135,14 @@ lastLogTime = datetime.now().strftime('%M')
 gps_time = time.time()
 
 print "Start main loop."
-#starttime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
-#file = open("logs/"+"separate_"+str(starttime))
+starttime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
+file = open(os.path.join("logs/","separate_"+str(starttime)+".txt"), "a")
+
+stdout = ""
+counter = 0.0
+totaltime = 0
+start_time = time.time()
 while(True):
-	start_time = time.time()
 	epoch += 1
 	try:
 		ctime = datetime.now().strftime('%H:%M:%S.%f')[:-3]
@@ -138,28 +150,28 @@ while(True):
 	
 		# Collect rpm data to add them to database and send to ground base
 #		sensordata.getDummy(ctime)
-		sensordata.fetchData(ctime)
+		if SENSOR: sensordata.fetchData(ctime)
 
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 
 		if debugging: print "Flag 1.1"
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
-		rpmdata 	= sensordata.getRPMdata()
+		if SENSOR: rpmdata 	= sensordata.getRPMdata()
 		if debugging: print "Flag 1.2"
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
-		throttledata	= sensordata.getThrottledata()
+		if SENSOR: throttledata	= sensordata.getThrottledata()
 		if debugging: print "Flag 1.3"
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
-		currentdata 	= sensordata.getCurrentdata()
+		if SENSOR: currentdata 	= sensordata.getCurrentdata()
 		if debugging: print "Flag 1.4"
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
-		voltagedata	= sensordata.getVoltagedata()
+		if SENSOR: voltagedata	= sensordata.getVoltagedata()
 		if debugging: print "Flag 1.5"
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 		
 		#oprint start_time - gps_time
 		if includeGPS:
-			if start_time - gps_time > 0.9 or  epoch < 5:
+			if start_time - gps_time > SET_GPSTIME or  epoch < 5: # 0.9 if locallogging
 				gpsdata	= getGPSData(tn, ctime)
 				gps_time = start_time
 			else:
@@ -187,44 +199,55 @@ while(True):
 		if (localLogging and includeGPS): addToDatabase(gpsdata)
 
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
+		time.sleep(SLEEP)
 
 		#print str(rpmToKMH(rpmdata.getData(), 0.235)) + " " + str(throttledata.getData()) + " " + str(currentdata.getData()) + " " + str(voltagedata.getData())
 	
 		if debugging: print "Flag 3."	
 
-		valRPM 		= rpmdata.getData()
-		valThrottle 	= throttledata.getData()
-		valCurrent 	= currentdata.getData()
-		valVoltage	= int(voltagedata.getData())
+		valRPM 		= 0#rpmdata.getData()
+		valThrottle 	= 0#throttledata.getData()
+		valCurrent 	= '0.00/0.00'#currentdata.getData()
+		valVoltage	= 0#int(voltagedata.getData())
 		valSpeed = rpmToKMH(float(valRPM), 0.235)
 
+		# Fuck Stephan
 		if (valSpeed == 0):
 			valSpeedDisplay = valSpeed + 1 
 		else:
-			valSpeedDisplay = valSpeed
+			valSpeedDisplay = valSpeed * SHOWDEC_SPEED
 		if (valVoltage == 0):
 			valVoltageDisplay = valVoltage + 1
 		else:
-			valVoltageDisplay = valVoltage
-		if DRIVERINTERFACE:
-			driverInterface.getSerial().write("S"+ str(valSpeedDisplay) +","+str(int(valVoltageDisplay)))
+			valVoltageDisplay = valVoltage * SHOWDEC_VOLT
+		counter = counter + time.time() - start_time
+		if DRIVERINTERFACE and counter > SET_PRINTTIME:
+			if debugging: print str(valSpeedDisplay) + "," + str(int(valVoltageDisplay))
+			driverInterface.getSerial().write("S"+ str(int(1.852 * gpsdata.getSpeed())) +","+str(int(valVoltageDisplay)))
 
 		if debugging: print "Flag 4."
 		if extratime: print "--- %s seconds ---" % (time.time() - start_time)
 
 		# Check if 3 minutes have passed to write the log
 		timeNow = datetime.now().strftime('%M')
-		if abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57:
+		if localLogging and ( abs(int(timeNow) - int(lastLogTime)) == 3 or abs(int(timeNow) - int(lastLogTime)) == 57):
 			writeDBToFile()
 			lastLogTime = timeNow
 
-		if includeGPS: print "T = " + str(valThrottle) + "\tV = " + str(valSpeed) + "\tI_1/2 = " + str(valCurrent) +\
-				"\tU = " + str(valVoltage) + "\tV_GPS = " + str(gpsdata.getSpeed()) + "\tLong = " + str(gpsdata.getLongtitude()) +\
+		valCurrent1, valCurrent2 =  valCurrent.split('/')
+
+		file.write(str(epoch) + "\t" + str(valThrottle) + "\t" + str(valRPM) + "\t" + str(valSpeed) + "\t" + valCurrent1 + "\t" + valCurrent2 + \
+				"\t" + str(valVoltage) + "\t" + str(1.852 * gpsdata.getSpeed()) + "\t" + str(gpsdata.getLongtitude()) +\
+				 "\t" + str(gpsdata.getLattitude()) + "\t%s" % (time.time() - start_time) + "\t" + str(ctime) + "\n")
+		if includeGPS and counter>SET_PRINTTIME: 
+			print "Epoch = " + str(epoch) + "\tT = " + str(valThrottle) + "\tV = " + str(valSpeed) + "\tI_1 = " + valCurrent1 + "\tI_2 = " + valCurrent2 +\
+				"\tU = " + str(valVoltage) + "\tV_GPS = " + str(1.852 * gpsdata.getSpeed()) + "\tLong = " + str(gpsdata.getLongtitude()) +\
 				 "\tLat = " + str(gpsdata.getLattitude()) + "\t--- %s seconds ---" % (time.time() - start_time)
 
-		time.sleep(0.01)
 		if debugging: print "End of loop."
-		
+		totaltime = totaltime + time.time() - start_time
+		start_time = time.time()
+		if counter>0.3: counter = 0.0		
 
 	except ValueError:
 		print "Wrong value for the rpm data!"
@@ -233,7 +256,8 @@ while(True):
 #		print "-----------------------------------------------"
 
 	except KeyboardInterrupt:
-		writeDBToFile()
-		print str(epoch) + "...\tepochs finished."
+		file.close()
+		if localLogging: writeDBToFile()
+		print "Finished " + str(epoch) + " epochs in %s" % totaltime + " resulting in an average update frequency of %s" % round(epoch / totaltime) + "Hz"
 		sys.exit()
 
